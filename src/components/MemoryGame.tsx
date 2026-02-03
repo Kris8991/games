@@ -1,20 +1,45 @@
-import React from "react";
-import "./Memory.css";
+import React, { useState } from "react";
+import InitialCards from "./InitialCards";
 
-const MemoryGrid: React.FC = () => {
-  const grid = [];
-  for (let i = 1; i <= 16; ++i) {
-    grid.push(i);
+const MemoryGame: React.FC = () => {
+  const gridSize = 4;
+  const [cardsState, setCardsState] = useState(InitialCards);
+
+  const gridRows = [];
+
+  for (let i = 0; i < cardsState.length; i += gridSize) {
+    gridRows.push(cardsState.slice(i, i + gridSize));
   }
+
+  const handleClick = (cardId: number) => {
+    setCardsState((cardsState) =>
+      cardsState.map((card) =>
+        card.id === cardId
+          ? {
+              ...card,
+              isFlipped: !card.isFlipped,
+            }
+          : card,
+      ),
+    );
+  };
+
   return (
     <div className="grid-container">
-      {grid.map((cell) => (
-        <div key={cell} className="grid-item">
-          {cell}
+      {gridRows.map((row, rowIndex) => (
+        <div key={rowIndex} className="grid-row">
+          {row.map((card) => (
+            <div
+              key={card.id}
+              className={`card ${card.isFlipped ? "flipped" : ""}`}
+              onClick={() => handleClick(card.id)}
+            >
+              {card.isFlipped ? card.value : "?"}
+            </div>
+          ))}
         </div>
       ))}
     </div>
   );
 };
-
-export default MemoryGrid;
+export default MemoryGame;
