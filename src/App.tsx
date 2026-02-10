@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import MemoryGame from "./components/MemoryGame";
+import MemoryGame from "./components/MemoryGame/MemoryGame";
 
 const App: React.FC = () => {
   return (
