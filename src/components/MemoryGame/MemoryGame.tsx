@@ -16,16 +16,20 @@ const MemoryGame: React.FC = () => {
   const [mathedCards, setMathedCards] = useState<number[]>([]);
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const handleClick = (cardId: number) => {
+  console.log(cardsState);
+
+  const handleClick = (cardIndex: number) => {
     if (
       isDisabled ||
-      flippedCards.includes(cardId) ||
-      mathedCards.includes(cardId)
+      flippedCards.includes(cardIndex) ||
+      mathedCards.includes(cardIndex)
     )
       return;
 
-    const newCardsState = cardsState.map((card) =>
-      card.id === cardId
+    console.log(cardIndex);
+
+    const newCardsState = cardsState.map((card, index) =>
+      index === cardIndex
         ? {
             ...card,
             isFlipped: true,
@@ -34,29 +38,30 @@ const MemoryGame: React.FC = () => {
     );
 
     setCardsState(newCardsState);
-    const newFlippedCards: number[] = [...flippedCards, cardId];
+    const newFlippedCards: number[] = [...flippedCards, cardIndex];
     setFlippedCards(newFlippedCards);
-
+    console.log(newCardsState);
+    console.log(newFlippedCards);
     if (newFlippedCards.length === 2) {
       setIsDisabled(true);
       const [first, second] = newFlippedCards;
-
+      console.log(first, newCardsState[first].value);
       if (newCardsState[first].value === newCardsState[second].value) {
         setMathedCards((prev) => [...prev, first, second]);
         setFlippedCards([]);
         setIsDisabled(false);
       } else {
-        const currentMathedCards = [...mathedCards];
+        //const currentMathedCards = [...mathedCards];
         setTimeout(() => {
           setCardsState((prevCards) =>
             prevCards.map((card) => {
               if (
-                (card.id === first || card.id === second) &&
-                !currentMathedCards.includes(card.id)
+                (cardIndex === first || cardIndex === second) &&
+                !mathedCards.includes(cardIndex)
               ) {
                 return { ...card, isFlipped: false };
               }
-              console.log(currentMathedCards);
+              console.log(mathedCards);
               return card;
             }),
           );
@@ -79,11 +84,11 @@ const MemoryGame: React.FC = () => {
       <div className={styles.gridContainer}>
         {gridRows.map((row, rowIndex) => (
           <div key={rowIndex} className={styles.gridRow}>
-            {row.map((card) => (
+            {row.map((card, index) => (
               <div
-                key={card.id}
+                key={index}
                 className={styles.card}
-                onClick={() => handleClick(card.id)}
+                onClick={() => handleClick(index)}
               >
                 {card.isFlipped ? card.value : "?"}
               </div>
