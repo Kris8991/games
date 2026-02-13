@@ -12,24 +12,27 @@ const MemoryGame: React.FC = () => {
   const [cardsState, setCardsState] = useState<CardType[]>(() =>
     shuffleCards(initialCards),
   );
-  const [flippedCards, setFlippedCards] = useState<number[]>([]);
-  const [mathedCards, setMathedCards] = useState<number[]>([]);
+  const [flippedCards, setFlippedCards] = useState<string[]>([]);
+  const [mathedCards, setMathedCards] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(false);
 
   console.log(cardsState);
 
-  const handleClick = (cardIndex: number) => {
+  const handleClick = (rowIndex: number, index: number) => {
+    const cardId = `${rowIndex}:${index}`;
+
     if (
       isDisabled ||
-      flippedCards.includes(cardIndex) ||
-      mathedCards.includes(cardIndex)
+      flippedCards.includes(cardId) ||
+      mathedCards.includes(cardId)
     )
       return;
 
-    console.log(cardIndex);
+    console.log(cardId);
 
-    const newCardsState = cardsState.map((card, index) =>
-      index === cardIndex
+    const indexCard = rowIndex * GRID_SIZE + index;
+    const newCardsState = cardsState.map((card, i) =>
+      i === indexCard
         ? {
             ...card,
             isFlipped: true,
@@ -37,28 +40,41 @@ const MemoryGame: React.FC = () => {
         : card,
     );
 
+    console.log(indexCard);
+
     setCardsState(newCardsState);
-    const newFlippedCards: number[] = [...flippedCards, cardIndex];
+    const newFlippedCards: string[] = [...flippedCards, cardId];
     setFlippedCards(newFlippedCards);
+
     console.log(newCardsState);
     console.log(newFlippedCards);
+
     if (newFlippedCards.length === 2) {
       setIsDisabled(true);
       const [first, second] = newFlippedCards;
-      console.log(first, newCardsState[first].value);
-      if (newCardsState[first].value === newCardsState[second].value) {
+
+      const [firstRow, firstIndex] = first.split(":").map(Number);
+      const firstIndexCard = firstRow * GRID_SIZE + firstIndex;
+
+      const [secondRow, secondIndex] = second.split(":").map(Number);
+      const secondIndexCard = secondRow * GRID_SIZE + secondIndex;
+
+      console.log(firstRow, firstIndex);
+
+      console.log(firstIndexCard, secondIndexCard);
+
+      if (
+        newCardsState[firstIndexCard].value ===
+        newCardsState[secondIndexCard].value
+      ) {
         setMathedCards((prev) => [...prev, first, second]);
         setFlippedCards([]);
         setIsDisabled(false);
       } else {
-        //const currentMathedCards = [...mathedCards];
         setTimeout(() => {
           setCardsState((prevCards) =>
-            prevCards.map((card) => {
-              if (
-                (cardIndex === first || cardIndex === second) &&
-                !mathedCards.includes(cardIndex)
-              ) {
+            prevCards.map((card, i) => {
+              if (i === firstIndexCard || i === secondIndexCard) {
                 return { ...card, isFlipped: false };
               }
               console.log(mathedCards);
@@ -84,15 +100,20 @@ const MemoryGame: React.FC = () => {
       <div className={styles.gridContainer}>
         {gridRows.map((row, rowIndex) => (
           <div key={rowIndex} className={styles.gridRow}>
-            {row.map((card, index) => (
-              <div
-                key={index}
-                className={styles.card}
-                onClick={() => handleClick(index)}
-              >
-                {card.isFlipped ? card.value : "?"}
-              </div>
-            ))}
+            {row.map((card, index) => {
+              const cardId = `${rowIndex}:${index}`;
+              const isFlipped = flippedCards.includes(cardId);
+              const isMathed = mathedCards.includes(cardId);
+              return (
+                <div
+                  key={cardId}
+                  className={styles.card}
+                  onClick={() => handleClick(rowIndex, index)}
+                >
+                  {isFlipped || isMathed ? card.value : "?"}
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>
