@@ -1,17 +1,9 @@
-.gameWrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 .gridContainer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
-.gridRow {
-  display: contents;
-}
+
 .card {
   width: 100px;
   height: 100px;

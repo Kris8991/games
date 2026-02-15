@@ -1,25 +1,51 @@
-export type CardType = {
-  id: number;
-  value: string;
+export type CardType<T> = {
+  value: T;
   isFlipped: boolean;
 };
-const initialCards: CardType[] = [
-  { id: 1, value: "A", isFlipped: false },
-  { id: 2, value: "B", isFlipped: false },
-  { id: 3, value: "C", isFlipped: false },
-  { id: 4, value: "D", isFlipped: false },
-  { id: 5, value: "E", isFlipped: false },
-  { id: 6, value: "F", isFlipped: false },
-  { id: 7, value: "G", isFlipped: false },
-  { id: 8, value: "H", isFlipped: false },
-  { id: 9, value: "A", isFlipped: false },
-  { id: 10, value: "B", isFlipped: false },
-  { id: 11, value: "C", isFlipped: false },
-  { id: 12, value: "D", isFlipped: false },
-  { id: 13, value: "E", isFlipped: false },
-  { id: 14, value: "F", isFlipped: false },
-  { id: 15, value: "G", isFlipped: false },
-  { id: 16, value: "H", isFlipped: false },
-];
-
-export default initialCards;
+const generateInitialArray = <T>(arr: T[]): CardType<T>[] => {
+  return arr.map((item) => ({
+    value: item,
+    isFlipped: false,
+  }));
+};
+const shuffleCards = <T>(cards: CardType<T>[]): CardType<T>[] => {
+  return [...cards].sort(() => Math.random() - 0.5);
+};
+const generateInitialMatrix = <T>(arr: CardType<T>[]): CardType<T>[][] => {
+  const pairedCards: CardType<T>[] = [];
+  for (const item of arr) {
+    pairedCards.push({ ...item });
+    pairedCards.push({ ...item });
+  }
+  const shuffledArr = shuffleCards(pairedCards);
+  const matrix: CardType<T>[][] = [];
+  for (let row = 0; row < 4; row++) {
+    matrix[row] = [];
+    for (let col = 0; col < 4; col++) {
+      const index = row * 4 + col;
+      matrix[row][col] = shuffledArr[index];
+    }
+  }
+  return matrix;
+};
+const initialCards = generateInitialArray([
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+]);
+const matrix = generateInitialMatrix(initialCards);
+console.log(matrix);
+export default matrix;
+// const getCards = <T>(
+//   items: CardType<T>[],
+// rows:number,
+// cols:number
+// ):CardType<T>[][] =>{
+//   const gameMatrix = rows * cols;
+//   const
+// }
