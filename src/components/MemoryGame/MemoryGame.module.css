@@ -1,9 +1,13 @@
-.gridContainer {
+.gridNormalContainer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
-
+.gridHardContainer {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
 .card {
   width: 100px;
   height: 100px;
@@ -20,4 +24,60 @@
 }
 .flipped {
   transform: rotateY(180deg);
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.buttonWrapper {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-around;
+}
+
+h1 {
+  text-align: center;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 300px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modalContent {
+  margin-top: 0;
+  color: #333;
+}
+
+button {
+  background: #393386;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 0;
+}
+
+.modalContent button:hover {
+  background: #2f296e;
 }

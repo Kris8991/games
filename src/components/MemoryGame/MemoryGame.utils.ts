@@ -31,8 +31,23 @@ export type CardType = {
   value: string;
   isFlipped: boolean;
 };
-// принимает число, вырезает кусок массива из массива английского алфавита = числу(7 или 17).  Возвращает массив карточек
-const getCards = (count: number): CardType[] => {
+
+export type Difficulty = "normal" | "hard";
+
+const CARD_COUNTS = {
+  normal: 8,
+  hard: 18,
+};
+
+const GRID_SIZE = {
+  normal: 4,
+  hard: 6,
+};
+//const count = difficulty === "normal" ? 8 : 18;
+
+// принимает число, вырезает кусок массива из массива английского алфавита = числу(8 или 18).  Возвращает массив карточек
+const getCards = (difficulty: Difficulty): CardType[] => {
+  const count = CARD_COUNTS[difficulty];
   const initialArray = ENGLISH_ALPHABET.slice(0, count);
   return initialArray.map((item) => ({
     value: item,
@@ -41,14 +56,17 @@ const getCards = (count: number): CardType[] => {
 };
 
 //Принимает массив карточек (8 или 18), удваивает его и перемешивает. На выходе pairedCards массив
-const generateMatrix = (cards: CardType[], size: number = 4): CardType[][] => {
+export const generateMatrix = (
+  difficulty: Difficulty = "normal",
+): CardType[][] => {
+  const cards = getCards(difficulty);
   const pairedCards: CardType[] = [];
   for (const item of cards) {
     pairedCards.push({ ...item });
     pairedCards.push({ ...item });
   }
   pairedCards.sort(() => Math.random() - 0.5);
-
+  const size = GRID_SIZE[difficulty];
   const matrix: CardType[][] = [];
   for (let row = 0; row < size; row++) {
     matrix[row] = [];
@@ -59,4 +77,4 @@ const generateMatrix = (cards: CardType[], size: number = 4): CardType[][] => {
   }
   return matrix;
 };
-export const matrix = generateMatrix(getCards(8));
+export const matrix = generateMatrix("normal");
