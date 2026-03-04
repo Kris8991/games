@@ -29,7 +29,6 @@ const ENGLISH_ALPHABET = [
 
 export type CardType = {
   value: string;
-  isFlipped: boolean;
 };
 
 export type Difficulty = "normal" | "hard";
@@ -51,11 +50,9 @@ const getCards = (difficulty: Difficulty): CardType[] => {
   const initialArray = ENGLISH_ALPHABET.slice(0, count);
   return initialArray.map((item) => ({
     value: item,
-    isFlipped: false,
   }));
 };
 
-//Принимает массив карточек (8 или 18), удваивает его и перемешивает. На выходе pairedCards массив
 export const generateMatrix = (
   difficulty: Difficulty = "normal",
 ): CardType[][] => {
