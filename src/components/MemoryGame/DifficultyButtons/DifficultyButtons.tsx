@@ -1,16 +1,18 @@
-import styles from "../MemoryGame.module.css";
-import type { Difficulty } from "../MemoryGame.utils";
+import React from 'react';
+import styles from '../MemoryGame.module.css';
+import type { Difficulty } from '../MemoryGame.utils';
 
-const DifficultyButtons = ({
-  onDifficultyChange,
-}: {
+type DifficultyButtonsProps = {
   onDifficultyChange: (difficulty: Difficulty) => void;
-}) => {
-  return (
-    <div className={styles.buttonWrapper}>
-      <button onClick={() => onDifficultyChange("normal")}>Normal</button>
-      <button onClick={() => onDifficultyChange("hard")}>Hard</button>
-    </div>
-  );
 };
+
+const DifficultyButtons: React.FC<DifficultyButtonsProps> = ({
+  onDifficultyChange,
+}) => (
+  <div className={styles.buttonWrapper}>
+    <button onClick={() => onDifficultyChange('normal')}>Normal</button>
+    <button onClick={() => onDifficultyChange('hard')}>Hard</button>
+  </div>
+);
+
 export default DifficultyButtons;

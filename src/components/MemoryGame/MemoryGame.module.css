@@ -22,12 +22,23 @@
   transition: transform 0.3s;
   color: blue;
 }
-
-.flipped {
-  transform: rotateY(180deg);
+.cardFlipped {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 8px;
+  transition: transform 0.3s;
+  color: rgb(189, 70, 11);
 }
 
 .flipped {
+  color: rgb(221, 108, 9);
   transform: rotateY(180deg);
 }
 
@@ -81,4 +92,7 @@ button {
 
 .modalContent button:hover {
   background: #2f296e;
+}
+.welcomeMessage {
+  text-align: center;
 }

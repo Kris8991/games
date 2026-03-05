@@ -1,13 +1,10 @@
-import ReactDOM from "react-dom";
-import styles from "../MemoryGame.module.css";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import styles from '../MemoryGame.module.css';
 
-const VictoryModal = ({
-  isActive,
-  onNewGame,
-}: {
-  isActive: boolean;
-  onNewGame: () => void;
-}) => {
+type VictoryModalProps = { isActive: boolean; onNewGame: () => void };
+
+const VictoryModal: React.FC<VictoryModalProps> = ({ isActive, onNewGame }) => {
   if (!isActive) return null;
   return ReactDOM.createPortal(
     <div className={styles.modal}>

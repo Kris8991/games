@@ -1,37 +1,37 @@
 const ENGLISH_ALPHABET = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-  "Q",
-  "R",
-  "S",
-  "T",
-  "U",
-  "V",
-  "W",
-  "X",
-  "Y",
-  "Z",
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z',
 ];
 
 export type CardType = {
   value: string;
 };
 
-export type Difficulty = "normal" | "hard";
+export type Difficulty = 'normal' | 'hard';
 
 const CARD_COUNTS = {
   normal: 8,
@@ -42,9 +42,6 @@ const GRID_SIZE = {
   normal: 4,
   hard: 6,
 };
-//const count = difficulty === "normal" ? 8 : 18;
-
-// принимает число, вырезает кусок массива из массива английского алфавита = числу(8 или 18).  Возвращает массив карточек
 const getCards = (difficulty: Difficulty): CardType[] => {
   const count = CARD_COUNTS[difficulty];
   const initialArray = ENGLISH_ALPHABET.slice(0, count);
@@ -54,7 +51,7 @@ const getCards = (difficulty: Difficulty): CardType[] => {
 };
 
 export const generateMatrix = (
-  difficulty: Difficulty = "normal",
+  difficulty: Difficulty = 'normal',
 ): CardType[][] => {
   const cards = getCards(difficulty);
   const pairedCards: CardType[] = [];
@@ -74,4 +71,4 @@ export const generateMatrix = (
   }
   return matrix;
 };
-export const matrix = generateMatrix("normal");
+export const matrix = generateMatrix('normal');

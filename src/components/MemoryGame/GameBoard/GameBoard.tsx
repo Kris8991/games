@@ -1,44 +1,43 @@
-import Card from "../Card/Card";
-import styles from "../MemoryGame.module.css";
-import type { CardType } from "../MemoryGame.utils";
+import React from 'react';
+import Card from '../Card/Card';
+import styles from '../MemoryGame.module.css';
+import type { CardType } from '../MemoryGame.utils';
 
-const GameBoard = ({
-  cards,
-  flippedCards,
-  onCardClick,
-  difficulty,
-}: {
+type GameBoardProps = {
   cards: CardType[][];
+  difficulty: 'normal' | 'hard';
   flippedCards: string[];
   onCardClick: (rowIndex: number, index: number) => void;
-  difficulty: "normal" | "hard";
-}) => {
-  console.log(flippedCards);
-  return (
-    <div
-      className={
-        difficulty === "normal"
-          ? styles.gridNormalContainer
-          : styles.gridHardContainer
-      }
-    >
-      {cards.map((row, rowIndex) => {
-        return row.map((card, index) => {
-          console.log(card);
-          const cardId = `${rowIndex}:${index}`;
-          const isFlipped = flippedCards.includes(cardId);
-          console.log(isFlipped);
-          return (
-            <Card
-              key={cardId}
-              card={card}
-              isFlipped={isFlipped}
-              onClick={() => onCardClick(rowIndex, index)}
-            />
-          );
-        });
-      })}
-    </div>
-  );
 };
+
+const GameBoard: React.FC<GameBoardProps> = ({
+  cards,
+  difficulty,
+  flippedCards,
+  onCardClick,
+}) => (
+  <div
+    className={
+      difficulty === 'normal'
+        ? styles.gridNormalContainer
+        : styles.gridHardContainer
+    }
+  >
+    {cards.map((row, rowIndex) =>
+      row.map((card, index) => {
+        const cardId = `${rowIndex}:${index}`;
+        const isFlipped = flippedCards.includes(cardId);
+        return (
+          <Card
+            key={cardId}
+            card={card}
+            isFlipped={isFlipped}
+            onClick={() => onCardClick(rowIndex, index)}
+          />
+        );
+      }),
+    )}
+  </div>
+);
+
 export default GameBoard;
