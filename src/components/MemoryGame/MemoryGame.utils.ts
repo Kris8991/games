@@ -1,30 +1,22 @@
-const ENGLISH_ALPHABET = [
-  'A',
-  'B',
-  'C',
-  'D',
-  'E',
-  'F',
-  'G',
-  'H',
-  'I',
-  'J',
-  'K',
-  'L',
-  'M',
-  'N',
-  'O',
-  'P',
-  'Q',
-  'R',
-  'S',
-  'T',
-  'U',
-  'V',
-  'W',
-  'X',
-  'Y',
-  'Z',
+const IMAGES_CAT = [
+  '../public/images/cat_1.png',
+  '../public/images/cat_2.png',
+  '../public/images/cat_3.png',
+  '../public/images/cat_4.png',
+  '../public/images/cat_5.png',
+  '../public/images/cat_6.png',
+  '../public/images/cat_7.png',
+  '../public/images/cat_8.png',
+  '../public/images/cat_9.png',
+  '../public/images/cat_10.png',
+  '../public/images/cat_11.png',
+  '../public/images/cat_12.png',
+  '../public/images/cat_13.png',
+  '../public/images/cat_14.png',
+  '../public/images/cat_15.png',
+  '../public/images/cat_16.png',
+  '../public/images/cat_17.png',
+  '../public/images/cat_18.png',
 ];
 
 export type CardType = {
@@ -44,7 +36,7 @@ const GRID_SIZE = {
 };
 const getCards = (difficulty: Difficulty): CardType[] => {
   const count = CARD_COUNTS[difficulty];
-  const initialArray = ENGLISH_ALPHABET.slice(0, count);
+  const initialArray = IMAGES_CAT.slice(0, count);
   return initialArray.map((item) => ({
     value: item,
   }));

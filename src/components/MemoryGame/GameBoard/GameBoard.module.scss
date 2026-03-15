@@ -1,0 +1,47 @@
+@use '../styles/importer.scss' as *;
+
+.container {
+  position: relative;
+  min-height: 100vh;
+  max-width: 1200px;
+  width: 90%;
+  box-sizing: border-box;
+  @include flex-center;
+  flex-direction: column;
+  animation: slideIn 0.5s ease;
+  margin: 0 auto;
+  @include respond-to(mobile) {
+    flex-direction: column;
+    align-items: center;
+
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+.gridNormalContainer,
+.gridHardContainer {
+  display: grid;
+  gap: 5px;
+  justify-content: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  animation: slideIn 0.5s ease;
+}
+
+.gridNormalContainer {
+  grid-template-columns: repeat(4, minmax(70px, 100px));
+  //gap: 5px;
+
+  // @include respond-to(tablet) {
+  //   gap: 4px;
+  // }
+  // @include respond-to(mobile) {
+  //   gap: 4px;
+  // }
+}
+
+.gridHardContainer {
+  grid-template-columns: repeat(6, minmax(50px, 80px));
+}

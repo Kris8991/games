@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from '../Card/Card';
-import styles from '../MemoryGame.module.css';
+import styles from './GameBoard.module.scss';
 import type { CardType } from '../MemoryGame.utils';
 
 type GameBoardProps = {
@@ -16,27 +16,29 @@ const GameBoard: React.FC<GameBoardProps> = ({
   flippedCards,
   onCardClick,
 }) => (
-  <div
-    className={
-      difficulty === 'normal'
-        ? styles.gridNormalContainer
-        : styles.gridHardContainer
-    }
-  >
-    {cards.map((row, rowIndex) =>
-      row.map((card, index) => {
-        const cardId = `${rowIndex}:${index}`;
-        const isFlipped = flippedCards.includes(cardId);
-        return (
-          <Card
-            key={cardId}
-            card={card}
-            isFlipped={isFlipped}
-            onClick={() => onCardClick(rowIndex, index)}
-          />
-        );
-      }),
-    )}
+  <div>
+    <div
+      className={
+        difficulty === 'normal'
+          ? styles.gridNormalContainer
+          : styles.gridHardContainer
+      }
+    >
+      {cards.map((row, rowIndex) =>
+        row.map((card, index) => {
+          const cardId = `${rowIndex}:${index}`;
+          const isFlipped = flippedCards.includes(cardId);
+          return (
+            <Card
+              key={cardId}
+              card={card}
+              isFlipped={isFlipped}
+              onClick={() => onCardClick(rowIndex, index)}
+            />
+          );
+        }),
+      )}
+    </div>
   </div>
 );
 

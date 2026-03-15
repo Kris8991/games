@@ -1,24 +1,37 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import type { Difficulty } from './MemoryGame.utils';
 import { matrix, generateMatrix } from './MemoryGame.utils';
 import DifficultyButtons from './DifficultyButtons';
 import GameBoard from './GameBoard';
-import VictoryModal from './VictoryModal/VictoryModal';
-import WelcomeMessage from './WelcomeMessage/WelcomeMessage';
+import VictoryModal from './VictoryModal';
+import WelcomeMessage from './WelcomeMessage';
+import Timer from './Timer';
+import { useTimer } from './Timer';
+import styles from '../MemoryGame/GameBoard/GameBoard.module.scss';
+import BestTimes from './BestTimes';
 
 const TOTAL_NORMAL = 16;
-const TOTAL_HARD = 32;
+const TOTAL_HARD = 36;
 const MemoryGame: React.FC = () => {
+  const { displayTime, start, reset, stop } = useTimer();
   const firstCardId = useRef<string>('');
-
   const [cards, setCards] = useState(matrix);
   const [flippedCards, setFlippeCards] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isModalActive, setIsModalActive] = useState(false);
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
   const [gameStarted, setGameStarted] = useState(false);
+  const [bestTimes, setBestTimes] = useState<string[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('bestTimes');
+    if (saved) {
+      setBestTimes(JSON.parse(saved));
+    }
+  }, []);
 
   const handleDifficultyChange = (newDifficulty: Difficulty) => {
+    reset();
     setDifficulty(newDifficulty);
     setCards(generateMatrix(newDifficulty));
     setFlippeCards([]);
@@ -28,6 +41,7 @@ const MemoryGame: React.FC = () => {
   };
 
   const handleNewGameStart = (): void => {
+    reset();
     setCards(generateMatrix(difficulty));
     setFlippeCards([]);
     firstCardId.current = '';
@@ -38,21 +52,26 @@ const MemoryGame: React.FC = () => {
     const totalCards = difficulty === 'normal' ? TOTAL_NORMAL : TOTAL_HARD;
 
     const cardId = `${rowIndex}:${index}`;
+    start();
 
     if (isDisabled) return;
     if (flippedCards.includes(cardId)) return;
 
     if (firstCardId.current === '') {
       firstCardId.current = cardId;
-
       setFlippeCards((prevValue) => [...prevValue, firstCardId.current]);
       return;
     }
 
     setFlippeCards((prevValue) => {
       const updateCards = [...prevValue, cardId];
+
       if (totalCards === updateCards.length) {
+        stop();
         setTimeout(() => {
+          if (totalCards === updateCards.length) {
+            saveBestTime(displayTime);
+          }
           setIsModalActive(true);
         }, 100);
       }
@@ -82,22 +101,46 @@ const MemoryGame: React.FC = () => {
     }
     firstCardId.current = '';
   };
+
+  const saveBestTime = (newTime: string) => {
+    const timeToSeconds = (time: string): number => {
+      const [mins, secs] = time.split(':').map(Number);
+      return mins * 60 + secs;
+    };
+    const current = [...bestTimes];
+    current.push(newTime);
+    current.sort((a, b) => timeToSeconds(a) - timeToSeconds(b));
+    const top3 = current.slice(0, 3);
+    setBestTimes(top3);
+    localStorage.setItem('bestTimes', JSON.stringify(top3));
+  };
   return (
-    <>
+    <div className={styles.container}>
       <h1>Memory Game</h1>
       {!gameStarted ? (
-        <WelcomeMessage />
+        <>
+          <WelcomeMessage />
+          <DifficultyButtons onDifficultyChange={handleDifficultyChange} />
+        </>
       ) : (
-        <GameBoard
-          cards={cards}
-          flippedCards={flippedCards}
-          onCardClick={handleClick}
-          difficulty={difficulty}
-        />
+        <>
+          <Timer displayTime={displayTime} />
+          <GameBoard
+            cards={cards}
+            flippedCards={flippedCards}
+            onCardClick={handleClick}
+            difficulty={difficulty}
+          />
+          <BestTimes times={bestTimes} />
+        </>
       )}
-      <DifficultyButtons onDifficultyChange={handleDifficultyChange} />
-      <VictoryModal isActive={isModalActive} onNewGame={handleNewGameStart} />
-    </>
+      <VictoryModal
+        isActive={isModalActive}
+        onNewGame={handleNewGameStart}
+        displayTime={displayTime}
+      />
+      <div className={styles.recordsContainer}></div>
+    </div>
   );
 };
 

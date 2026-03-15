@@ -1,19 +1,19 @@
 import React from 'react';
-import styles from '../MemoryGame.module.css';
+import styles from './Card.module.scss';
 import type { CardType } from '../MemoryGame.utils';
 
-type Props = {
+type CardProps = {
   card: CardType;
   isFlipped: boolean;
   onClick: () => void;
 };
 
-const Card: React.FC<Props> = ({ card, isFlipped, onClick }) => (
+const Card: React.FC<CardProps> = ({ card, isFlipped, onClick }) => (
   <div
-    className={isFlipped ? styles.cardFlipped : styles.card}
+    className={`${styles.card} ${isFlipped ? styles.flipped : ''}`}
     onClick={onClick}
   >
-    {isFlipped ? card.value : '?'}
+    {isFlipped ? <img src={card.value} /> : '?'}
   </div>
 );
 

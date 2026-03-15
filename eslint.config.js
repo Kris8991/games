@@ -24,7 +24,7 @@ export default defineConfig([
     rules: {
       'no-multi-spaces': 'error',
       'no-var': 'error',
-      'no-console': 'error',
+      'no-console': 'warn',
     },
   },
 ]);

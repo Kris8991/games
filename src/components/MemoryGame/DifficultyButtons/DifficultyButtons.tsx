@@ -1,5 +1,6 @@
 import React from 'react';
-import styles from '../MemoryGame.module.css';
+import styles from './DifficultyButtons.module.scss';
+
 import type { Difficulty } from '../MemoryGame.utils';
 
 type DifficultyButtonsProps = {

@@ -1,0 +1,25 @@
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin respond-to($device) {
+  @if $device == mobile {
+    @media (width <= 480px) {
+      @content;
+    }
+  }
+
+ @else if $device == tablet {
+    @media (width <= 768px) {
+      @content;
+    }
+  }
+
+ @else if $device == desktop {
+    @media (width <= 1024px) {
+      @content;
+    }
+  }
+}
