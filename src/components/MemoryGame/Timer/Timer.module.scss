@@ -13,7 +13,6 @@
   font-weight: 600;
   animation: slideIn 0.5s ease;
 
-  // Адаптивность
   @include respond-to(mobile) {
     padding: 6px 12px;
     font-size: 1rem;
@@ -32,6 +31,6 @@
   .time {
     font-family: 'Courier New', monospace;
     letter-spacing: 1px;
-    min-width: 55px; // чтобы не прыгал при изменении цифр
+    min-width: 55px;
   }
 }

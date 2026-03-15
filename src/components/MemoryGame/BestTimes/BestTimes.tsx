@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './BestTimes.module.scss';
+
 type BestTimesProps = {
   times: string[];
 };

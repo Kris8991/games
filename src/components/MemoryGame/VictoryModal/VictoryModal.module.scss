@@ -65,12 +65,3 @@ p {
   position: relative;
   z-index: 1;
 }
-
-.confetti {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: #ffd700;
-  opacity: 0;
-  animation: confetti 3s ease-in-out infinite;
-}

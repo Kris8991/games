@@ -3,28 +3,24 @@
 .recordsContainer {
   position: absolute;
   right: -250px;
-  top: 100px;
+  top: 250px;
   @include flex-center;
   flex-direction: column;
   gap: 0.5rem;
   animation: slideIn 0.5s ease;
-
   @include respond-to(tablet) {
     position: static;
   }
-
   h3 {
     margin: 0 0 0.5rem;
     color: $text-dark;
     text-shadow: $shadow-lg;
   }
-
   .list {
     @include flex-center;
     flex-direction: column;
     gap: 0.5rem;
   }
-
   .item {
     display: flex;
     align-items: center;
@@ -41,13 +37,6 @@
   color: #999;
   padding: 1rem;
 }
-
-.medal {
-  font-size: 1.2rem;
-  margin-right: 0.5rem;
-  min-width: 30px;
-}
-
 .time {
   font-weight: bold;
   font-family: monospace;

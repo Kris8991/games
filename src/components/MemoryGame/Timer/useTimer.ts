@@ -45,5 +45,5 @@ export const useTimer = () => {
     return () => stop();
   }, []);
 
-  return { displayTime, formatTime, start, stop, reset };
+  return { displayTime, start, stop, reset };
 };
