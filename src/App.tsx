@@ -1,10 +1,17 @@
 import React from 'react';
-import MemoryGame from './components/MemoryGame/MemoryGame';
+import HomePage from './components/HomePages';
+import { Route, Routes } from 'react-router-dom';
+import MemoryGame from './components/MemoryGame';
+import Sudocu from './components/Sudocu/Sudocu';
 const App: React.FC = () => {
   return (
-    <div>
-      <MemoryGame />
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/memory" element={<MemoryGame />} />
+        <Route path="/sudocu" element={<Sudocu />} />
+      </Routes>
+    </>
   );
 };
 

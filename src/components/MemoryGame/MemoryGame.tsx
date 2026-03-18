@@ -9,6 +9,7 @@ import Timer from './Timer';
 import { useTimer } from './Timer';
 import styles from '../MemoryGame/GameBoard/GameBoard.module.scss';
 import BestTimes from './BestTimes';
+import { useNavigate } from 'react-router-dom';
 
 const TOTAL_NORMAL = 16;
 const TOTAL_HARD = 36;
@@ -22,6 +23,9 @@ const MemoryGame: React.FC = () => {
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
   const [gameStarted, setGameStarted] = useState(false);
   const [bestTimes, setBestTimes] = useState<string[]>([]);
+
+  const navigate = useNavigate();
+  const goBack = () => navigate(-1);
 
   useEffect(() => {
     const saved = localStorage.getItem('bestTimes');
@@ -140,6 +144,10 @@ const MemoryGame: React.FC = () => {
         displayTime={displayTime}
       />
       <div className={styles.recordsContainer}></div>
+
+      <button className={styles.goBack} onClick={goBack}>
+        ◀-- К выбору игры
+      </button>
     </div>
   );
 };

@@ -1,15 +1,14 @@
-@use '../styles/importer.scss' as *;
+@use '../styles/index' as *;
 
 .timer {
   @include flex-center;
-  width: 100px;
-  gap: 8px;
+  max-width: 100px;
   padding: 8px 16px;
   background: linear-gradient(135deg, $primary 0%, $secondary 100%);
   border-radius: 50px;
   box-shadow: $shadow-md;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   animation: slideIn 0.5s ease;
 
@@ -31,6 +30,7 @@
   .time {
     font-family: 'Courier New', monospace;
     letter-spacing: 1px;
-    min-width: 55px;
+    //padding: 0 0.5rem;
+    //min-width: 55px;
   }
 }

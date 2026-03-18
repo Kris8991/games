@@ -1,8 +1,8 @@
-@use '../styles/importer.scss' as *;
+@use '../styles/index' as *;
 
 .recordsContainer {
   position: absolute;
-  right: -250px;
+  right: -40px;
   top: 250px;
   @include flex-center;
   flex-direction: column;
