@@ -2,7 +2,7 @@ import React from 'react';
 import HomePage from './components/HomePages';
 import { Route, Routes } from 'react-router-dom';
 import MemoryGame from './components/MemoryGame';
-import Sudocu from './components/Sudocu/Sudocu';
+import Sudocu from './components/Sudocu/Sudoku';
 const App: React.FC = () => {
   return (
     <>

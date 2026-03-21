@@ -1,7 +1,18 @@
 @use 'variables' as *;
 @use 'animations' as *;
 @use 'mixins' as *;
-
+@use 'sass:color';
+.container {
+  position: relative;
+  min-height: 100vh;
+  max-width: 1200px;
+  width: 90%;
+  box-sizing: border-box;
+  @include flex-center;
+  flex-direction: column;
+  animation: slideIn 0.5s ease;
+  margin: 0 auto;
+}
 h1 {
   text-align: center;
   color: $text-dark;
@@ -30,17 +41,18 @@ button {
   box-shadow: 0 4px 15px rgb(0 0 0 / 20%);
   animation: pulse 2s ease infinite;
   &.goBack {
+    margin-top: 15px;
     padding: 10px 20px;
     animation: none;
   }
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgb(0 0 0 / 30%);
-    background: darken(#f8f9fa, 10%);
+    background: color.scale(#f8f9fa, $lightness: -10%);
   }
 
   &:active {
     transform: translateY(-1px);
-    background: darken(#f8f9fa, 15%);
+    background: color.scale(#f8f9fa, $lightness: -10%);
   }
 }
