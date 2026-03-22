@@ -15,7 +15,7 @@ const Cell: React.FC<CellProps> = ({ cell, isInitial, onChange, isError }) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleClick = () => {
-    if (!isInitial && cell === null) {
+    if (!isInitial || isError) {
       setIsEditing(true);
       setInputValue('');
     }
@@ -30,13 +30,12 @@ const Cell: React.FC<CellProps> = ({ cell, isInitial, onChange, isError }) => {
 
   const handleBlur = () => {
     if (inputValue === '') {
-      setIsEditing(false);
-      return;
-    }
-
-    const numValue = parseInt(inputValue, 10);
-    if (numValue >= 1 && numValue <= 9) {
-      onChange?.(numValue);
+      onChange?.(null);
+    } else {
+      const numValue = parseInt(inputValue, 10);
+      if (numValue >= 1 && numValue <= 9) {
+        onChange?.(numValue);
+      }
     }
     setIsEditing(false);
   };
@@ -51,7 +50,7 @@ const Cell: React.FC<CellProps> = ({ cell, isInitial, onChange, isError }) => {
 
   return (
     <div
-      className={`${styles.cell} ${isInitial ? styles.initial : ''} ${isError ? styles.error : ''} ${cell !== null && !isInitial ? styles.userFilled : ''}`}
+      className={`${styles.cell} ${isInitial ? styles.initial : ''} ${isError ? styles.error : ''} ${!isInitial && cell !== null ? styles.userFilled : ''}`}
       onClick={handleClick}
     >
       {isEditing ? (
