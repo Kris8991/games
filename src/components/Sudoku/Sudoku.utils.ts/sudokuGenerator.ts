@@ -41,6 +41,5 @@ export const generateSudoku = () => {
   const sudoku = createEmptyGrid();
 
   resolveSudoku(sudoku);
-  console.log(sudoku);
   return sudoku;
 };
