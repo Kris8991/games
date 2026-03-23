@@ -30,8 +30,8 @@ export const checkValidate = (params: ValidationParams) => {
         if (grid[iRow][iColumn] === value && iRow !== row && iColumn !== column)
           return false;
       }
-      return true;
     }
+    return true;
   };
 
   return validateColumn() && validateRow() && validateBox();

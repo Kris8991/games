@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './Cell.module.scss';
+import styles from '../Sudoku.module.scss';
 
 type CellProps = {
   cell: number | null;
