@@ -1,0 +1,58 @@
+@use 'variables' as *;
+@use 'animations' as *;
+@use 'mixins' as *;
+@use 'sass:color';
+.container {
+  position: relative;
+  min-height: 100vh;
+  max-width: 1200px;
+  width: 90%;
+  box-sizing: border-box;
+  @include flex-center;
+  flex-direction: column;
+  animation: slideIn 0.5s ease;
+  margin: 0 auto;
+}
+h1 {
+  text-align: center;
+  color: $text-dark;
+  font-size: clamp(2rem, 6vw, 4rem);
+  margin: 1rem 0;
+  text-shadow: $shadow-sm;
+  white-space: nowrap;
+  @include respond-to(mobile) {
+    padding: 0;
+  }
+}
+
+button {
+  background: white;
+  color: #667eea;
+  border: none;
+  padding: 15px 40px;
+  margin-bottom: 10px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 15px rgb(0 0 0 / 20%);
+  animation: pulse 2s ease infinite;
+  &.goBack {
+    margin-top: 15px;
+    padding: 10px 20px;
+    animation: none;
+  }
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgb(0 0 0 / 30%);
+    background: color.scale(#f8f9fa, $lightness: -10%);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    background: color.scale(#f8f9fa, $lightness: -10%);
+  }
+}

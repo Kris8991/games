@@ -1,0 +1,44 @@
+@use '../styles/index' as *;
+
+.recordsContainer {
+  position: absolute;
+  right: -40px;
+  top: 250px;
+  @include flex-center;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: slideIn 0.5s ease;
+  @include respond-to(tablet) {
+    position: static;
+  }
+  h3 {
+    margin: 0 0 0.5rem;
+    color: $text-dark;
+    text-shadow: $shadow-lg;
+  }
+  .list {
+    @include flex-center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    background: white;
+    color: #667eea;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  }
+}
+
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 1rem;
+}
+.time {
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 1.1rem;
+}

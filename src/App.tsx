@@ -1,12 +1,17 @@
-import React from "react";
-import "./App.css";
-import MemoryGrid from "./components/MemoryGame";
-
+import React from 'react';
+import HomePage from './components/HomePages';
+import { Route, Routes } from 'react-router-dom';
+import MemoryGame from './components/MemoryGame';
+import Sudocu from './components/Sudoku';
 const App: React.FC = () => {
   return (
-    <div>
-      <MemoryGrid />
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/memory" element={<MemoryGame />} />
+        <Route path="/sudocu" element={<Sudocu />} />
+      </Routes>
+    </>
   );
 };
 

@@ -1,0 +1,67 @@
+@use '../styles/index' as *;
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgb(0 0 0 / 70%);
+  backdrop-filter: blur(8px);
+
+  @include flex-center;
+
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modalContent {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px;
+  border-radius: 24px;
+  text-align: center;
+  min-width: 320px;
+  max-width: 90%;
+  box-shadow:
+    0 20px 60px rgb(0 0 0 / 30%),
+    0 0 0 2px rgb(255 255 255 / 10%) inset;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '🎉';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    font-size: 100px;
+    opacity: 0.2;
+    transform: rotate(-15deg);
+  }
+
+  &::after {
+    content: '🎉';
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    font-size: 100px;
+    opacity: 0.2;
+    transform: rotate(15deg);
+  }
+
+  h2 {
+    margin: 0 0 20px;
+    color: white;
+    font-size: 36px;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgb(0 0 0 / 20%);
+    position: relative;
+    z-index: 1;
+  }
+
+  animation: glow 2s ease-in-out infinite;
+}
+
+p {
+  color: rgb(255 255 255 / 90%);
+  font-size: 20px;
+  margin: 0 0 30px;
+  position: relative;
+  z-index: 1;
+}
