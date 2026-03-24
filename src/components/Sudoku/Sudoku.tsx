@@ -53,6 +53,8 @@ const Sudoku: React.FC = () => {
         newValue = parseInt(key, 10);
       } else if (key === 'Backspace' || key === 'Delete') {
         newValue = null;
+      } else if (key === 'H' || key === 'h' || key === 'Р' || key === 'р') {
+        newValue = fullMatrix[row][column];
       } else return;
 
       setGameBoard((prevGameBoard) => {
