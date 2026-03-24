@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Sudoku.module.scss';
 import Cell from './Cell';
 import { generateSudoku, createGameBoard } from './Sudoku.utils.ts/index.ts';
+import SudokuModal from './SudokuModal/SudokuModal.tsx';
 
 const Sudoku: React.FC = () => {
   const navigate = useNavigate();
@@ -11,11 +12,50 @@ const Sudoku: React.FC = () => {
   const [fullMatrix, setFullMatrix] = useState<number[][]>([]);
   const [gameBoard, setGameBoard] = useState<(number | null)[][]>([]);
   const [initialCells, setInitialCells] = useState<Set<string>>(new Set());
+  const [helpsCount, setHelpsCount] = useState<number>(3);
   const [errorCells, setErrorCells] = useState<Set<string>>(new Set());
   const [selectedCell, setSelectedCell] = useState<{
     row: number;
     column: number;
   } | null>(null);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
+  const resetGame = useCallback(() => {
+    const generated = generateSudoku();
+    setFullMatrix(generated);
+    const board = createGameBoard(generated);
+    setGameBoard(board);
+
+    const initials = new Set<string>();
+    board.forEach((row, i) => {
+      row.forEach((cell, j) => {
+        if (cell !== null) {
+          initials.add(`${i},${j}`);
+        }
+      });
+    });
+
+    setInitialCells(initials);
+
+    setErrorCells(new Set());
+    setSelectedCell(null);
+    setHelpsCount(3);
+    setIsModalActive(false);
+  }, []);
+
+  useEffect(() => {
+    if (gameBoard.length === 0) return;
+    const allFilled = gameBoard.every((row) =>
+      row.every((cell) => cell !== null),
+    );
+    const noErrors = errorCells.size === 0;
+
+    if (allFilled && noErrors) {
+      setModalMessage('Поздравляю! Вы победили!');
+      setIsModalActive(true);
+    }
+  }, [gameBoard, errorCells, isModalActive]);
 
   useEffect(() => {
     const generated = generateSudoku();
@@ -54,7 +94,12 @@ const Sudoku: React.FC = () => {
       } else if (key === 'Backspace' || key === 'Delete') {
         newValue = null;
       } else if (key === 'H' || key === 'h' || key === 'Р' || key === 'р') {
-        newValue = fullMatrix[row][column];
+        if (helpsCount > 0) {
+          setHelpsCount((prev) => prev - 1);
+          newValue = fullMatrix[row][column];
+        } else {
+          alert('Подсказки закончились');
+        }
       } else return;
 
       setGameBoard((prevGameBoard) => {
@@ -69,14 +114,19 @@ const Sudoku: React.FC = () => {
 
         if (newValue !== null && fullMatrix[row][column] !== newValue) {
           newErrors.add(key);
+          if (newErrors.size >= 3) {
+            setIsModalActive(true);
+            setModalMessage('Вы проиграли!');
+          }
         } else {
           newErrors.delete(key);
         }
+
         return newErrors;
       });
     },
 
-    [selectedCell, fullMatrix, gameBoard, errorCells, initialCells],
+    [selectedCell, fullMatrix, gameBoard, errorCells, initialCells, helpsCount],
   );
 
   useEffect(() => {
@@ -100,8 +150,6 @@ const Sudoku: React.FC = () => {
 
       if (initialCells.has(cellKey)) return;
       if (currentValue !== null && !errorCells.has(cellKey)) return;
-
-      // if (isInitialCell(row, column)) return;
 
       setSelectedCell({ row, column });
     },
@@ -134,6 +182,11 @@ const Sudoku: React.FC = () => {
       <button className={styles.goBack} onClick={goBack}>
         ◀-- К выбору игры
       </button>
+      <SudokuModal
+        isActive={isModalActive}
+        onNewGame={resetGame}
+        message={modalMessage}
+      />
     </div>
   );
 };

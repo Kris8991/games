@@ -5,7 +5,7 @@ import styles from './VictoryModal.module.scss';
 type VictoryModalProps = {
   isActive: boolean;
   onNewGame: () => void;
-  displayTime: string;
+  displayTime?: string;
 };
 
 const VictoryModal: React.FC<VictoryModalProps> = ({
