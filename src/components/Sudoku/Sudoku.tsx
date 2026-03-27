@@ -1,27 +1,30 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Sudoku.module.scss';
 import Cell from './Cell';
-import { generateSudoku, createGameBoard } from './Sudoku.utils.ts/index.ts';
-import SudokuModal from './SudokuModal/SudokuModal.tsx';
+import { generateSudoku, createGameBoard } from './Sudoku.utils.ts';
+import SudokuModal from './SudokuModal/SudokuModal';
+import SudokuInfo from './SudokuInfo.tsx';
 
 const Sudoku: React.FC = () => {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
 
+  const [correctCells, setCorrectCells] = useState<string[]>([]);
+  const [errorCells, setErrorCells] = useState<Set<string>>(new Set());
+  const [errorsCount, setErrorsCount] = useState<number>(0);
   const [fullMatrix, setFullMatrix] = useState<number[][]>([]);
   const [gameBoard, setGameBoard] = useState<(number | null)[][]>([]);
-  const [initialCells, setInitialCells] = useState<Set<string>>(new Set());
   const [helpsCount, setHelpsCount] = useState<number>(3);
-  const [errorCells, setErrorCells] = useState<Set<string>>(new Set());
+  const [initialCells, setInitialCells] = useState<Set<string>>(new Set());
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const [selectedCell, setSelectedCell] = useState<{
     row: number;
     column: number;
   } | null>(null);
-  const [isModalActive, setIsModalActive] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
 
-  const resetGame = useCallback(() => {
+  const resetGame = () => {
     const generated = generateSudoku();
     setFullMatrix(generated);
     const board = createGameBoard(generated);
@@ -37,32 +40,19 @@ const Sudoku: React.FC = () => {
     });
 
     setInitialCells(initials);
-
     setErrorCells(new Set());
     setSelectedCell(null);
     setHelpsCount(3);
+    setErrorsCount(0);
     setIsModalActive(false);
-  }, []);
-
-  useEffect(() => {
-    if (gameBoard.length === 0) return;
-    const allFilled = gameBoard.every((row) =>
-      row.every((cell) => cell !== null),
-    );
-    const noErrors = errorCells.size === 0;
-
-    if (allFilled && noErrors) {
-      setModalMessage('Поздравляю! Вы победили!');
-      setIsModalActive(true);
-    }
-  }, [gameBoard, errorCells, isModalActive]);
+    setCorrectCells([]);
+  };
 
   useEffect(() => {
     const generated = generateSudoku();
     setFullMatrix(generated);
     const board = createGameBoard(generated);
     setGameBoard(board);
-
     const initials = new Set<string>();
     board.forEach((row, i) => {
       row.forEach((cell, j) => {
@@ -75,118 +65,120 @@ const Sudoku: React.FC = () => {
     setInitialCells(initials);
   }, []);
 
-  const handleKeyPress = useCallback(
-    (e: KeyboardEvent) => {
-      if (!selectedCell) return;
-      const { row, column } = selectedCell;
-      const key = e.key;
+  const handleValueChange = (
+    row: number,
+    column: number,
+    newValue: number | null,
+  ) => {
+    setGameBoard((prevGameBoard) => {
+      const currentValue = prevGameBoard[row]?.[column];
+      if (currentValue === newValue) return prevGameBoard;
+
+      const newGameBoard = prevGameBoard.map((row) => [...row]);
+      newGameBoard[row][column] = newValue;
 
       const cellKey = `${row},${column}`;
-      const currentValue = gameBoard[row]?.[column];
+      const isCorrect =
+        newValue !== null && fullMatrix[row][column] === newValue;
 
-      if (initialCells.has(cellKey)) return;
-      if (currentValue !== null && !errorCells.has(cellKey)) return;
+      setCorrectCells((prev) => {
+        if (isCorrect) {
+          if (prev.includes(cellKey)) return prev;
 
-      let newValue: number | null = null;
+          const newCorrectCells = [...prev, cellKey];
 
-      if (/^[1-9]$/.test(key)) {
-        newValue = parseInt(key, 10);
-      } else if (key === 'Backspace' || key === 'Delete') {
-        newValue = null;
-      } else if (key === 'H' || key === 'h' || key === 'Р' || key === 'р') {
-        if (helpsCount > 0) {
-          setHelpsCount((prev) => prev - 1);
-          newValue = fullMatrix[row][column];
+          if (newCorrectCells.length === 40) {
+            setIsModalActive(true);
+            setModalMessage('Вы выиграли!');
+          }
+
+          return newCorrectCells;
         } else {
-          alert('Подсказки закончились');
+          return prev;
         }
-      } else return;
-
-      setGameBoard((prevGameBoard) => {
-        const newGameBoard = prevGameBoard.map((row) => [...row]);
-        newGameBoard[row][column] = newValue;
-        return newGameBoard;
       });
 
       setErrorCells((prevErrors) => {
         const newErrors = new Set(prevErrors);
-        const key = `${row},${column}`;
 
-        if (newValue !== null && fullMatrix[row][column] !== newValue) {
-          newErrors.add(key);
-          if (newErrors.size >= 3) {
-            setIsModalActive(true);
-            setModalMessage('Вы проиграли!');
+        if (newValue !== null && !isCorrect) {
+          if (!newErrors.has(cellKey)) {
+            newErrors.add(cellKey);
           }
-        } else {
-          newErrors.delete(key);
+        } else if (isCorrect || newValue === null) {
+          if (newErrors.has(cellKey)) {
+            newErrors.delete(cellKey);
+          }
         }
-
         return newErrors;
       });
-    },
+      return newGameBoard;
+    });
+  };
+  const handleErrorCount = () => {
+    setErrorsCount((prev) => {
+      const newCount = prev + 1;
+      if (newCount === 3) {
+        setIsModalActive(true);
+        setModalMessage('Вы проиграли');
+      }
+      return newCount;
+    });
+  };
 
-    [selectedCell, fullMatrix, gameBoard, errorCells, initialCells, helpsCount],
-  );
+  const decrementHelpsCount = () => {
+    setHelpsCount((prev) => prev - 1);
+  };
 
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [handleKeyPress]);
+  const handleCellSelect = (row: number, column: number) => {
+    setSelectedCell({ row, column });
+  };
 
-  const isInitialCell = useCallback(
-    (row: number, column: number) => {
-      return initialCells.has(`${row},${column}`);
-    },
-    [initialCells],
-  );
-
-  const handleCellSelect = useCallback(
-    (row: number, column: number) => {
-      const cellKey = `${row},${column}`;
-      const currentValue = gameBoard[row]?.[column];
-
-      if (initialCells.has(cellKey)) return;
-      if (currentValue !== null && !errorCells.has(cellKey)) return;
-
-      setSelectedCell({ row, column });
-    },
-    [errorCells, initialCells, gameBoard],
-  );
-
+  const isInitialCell = (row: number, column: number) => {
+    return initialCells.has(`${row},${column}`);
+  };
   const isCellError = (row: number, column: number) => {
     return errorCells.has(`${row},${column}`);
   };
 
   return (
     <div className={styles.container}>
-      <h1>Welcome sudoku. </h1>
+      <h1>Судоку</h1>
+      <div className={styles.helpsInfo}>Подсказки: {helpsCount}</div>
       <div className={styles.sudokuGrid}>
         {gameBoard.map((row, rowIndex) =>
-          row.map((cell, index) => (
+          row.map((cell, columnIndex) => (
             <Cell
-              key={`${rowIndex}:${index}`}
               cell={cell}
-              isInitial={isInitialCell(rowIndex, index)}
-              isError={isCellError(rowIndex, index)}
+              column={columnIndex}
+              errorsCount={errorsCount}
+              fullMatrix={fullMatrix}
+              helpsCount={helpsCount}
+              isError={isCellError(rowIndex, columnIndex)}
+              isInitial={isInitialCell(rowIndex, columnIndex)}
               isSelected={
-                selectedCell?.row === rowIndex && selectedCell?.column === index
+                selectedCell?.row === rowIndex &&
+                selectedCell?.column === columnIndex
               }
-              onSelect={() => handleCellSelect(rowIndex, index)}
+              key={`${rowIndex}:${columnIndex}`}
+              row={rowIndex}
+              onErrorUsed={handleErrorCount}
+              onHelpUsed={decrementHelpsCount}
+              onSelect={handleCellSelect}
+              onValueChange={handleValueChange}
             />
           )),
         )}
       </div>
       <button className={styles.goBack} onClick={goBack}>
-        ◀-- К выбору игры
+        ◀️ К выбору игры
       </button>
       <SudokuModal
         isActive={isModalActive}
-        onNewGame={resetGame}
         message={modalMessage}
+        onNewGame={resetGame}
       />
+      <SudokuInfo errorCount={errorsCount} helpsCount={helpsCount} />
     </div>
   );
 };
