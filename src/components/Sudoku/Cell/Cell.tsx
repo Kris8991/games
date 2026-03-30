@@ -1,74 +1,68 @@
-import React, { useState } from 'react';
+import React, { memo } from 'react';
 import styles from '../Sudoku.module.scss';
+import { clsx } from 'clsx';
 
 type CellProps = {
   cell: number | null;
-  isInitial: boolean;
-  onChange?: (value: number | null) => void;
+  column: number;
+  row: number;
   isError: boolean;
-  row?: number;
-  col?: number;
+  isInitial: boolean;
+  isSelected: boolean;
+  onChange: (row: number, column: number, value: number | null) => void;
+  onHelp: (row: number, column: number) => void;
+  onSelect: (row: number, column: number) => void;
 };
 
-const Cell: React.FC<CellProps> = ({ cell, isInitial, onChange, isError }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+const Cell: React.FC<CellProps> = memo(
+  ({
+    cell,
+    column,
+    row,
+    isError,
+    isInitial,
+    isSelected,
+    onChange,
+    onHelp,
+    onSelect,
+  }) => {
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+      if (isInitial) return;
+      if (cell !== null && !isError) return;
 
-  const handleClick = () => {
-    if (!isInitial || isError) {
-      setIsEditing(true);
-      setInputValue('');
-    }
-  };
+      const key = e.key;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value === '' || /^[1-9]$/.test(value)) {
-      setInputValue(value);
-    }
-  };
-
-  const handleBlur = () => {
-    if (inputValue === '') {
-      onChange?.(null);
-    } else {
-      const numValue = parseInt(inputValue, 10);
-      if (numValue >= 1 && numValue <= 9) {
-        onChange?.(numValue);
+      if (/^[1-9]$/.test(key)) {
+        const value = parseInt(key, 10);
+        onChange(row, column, value);
+      } else if (key === 'Backspace' || key === 'Delete') {
+        onChange(row, column, null);
+      } else if (key === 'H' || key === 'h' || key === 'Р' || key === 'р') {
+        onHelp(row, column);
       }
-    }
-    setIsEditing(false);
-  };
+    };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleBlur();
-    } else if (e.key === 'Escape') {
-      setIsEditing(false);
-    }
-  };
+    const handleClick = () => {
+      if (isInitial) return;
+      onSelect(row, column);
+    };
 
-  return (
-    <div
-      className={`${styles.cell} ${isInitial ? styles.initial : ''} ${isError ? styles.error : ''} ${!isInitial && cell !== null ? styles.userFilled : ''}`}
-      onClick={handleClick}
-    >
-      {isEditing ? (
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          autoFocus
-          maxLength={1}
-          className={styles.input}
-        />
-      ) : (
+    return (
+      <div
+        className={clsx(styles.cell, {
+          [styles.initial]: isInitial,
+          [styles.error]: isError,
+          [styles.selected]: isSelected,
+          [styles.userFilled]: !isInitial && cell !== null,
+        })}
+        onClick={handleClick}
+        onKeyDown={handleKeyPress}
+        tabIndex={-1}
+      >
         <span>{cell !== null ? cell : ''}</span>
-      )}
-    </div>
-  );
-};
+      </div>
+    );
+  },
+);
 
 export default Cell;
