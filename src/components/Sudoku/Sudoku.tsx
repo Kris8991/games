@@ -25,6 +25,7 @@ const Sudoku: React.FC = () => {
   } | null>(null);
 
   const resetGame = () => {
+    correctCellsCount.current = 0;
     const generated = generateSudoku();
     setFullMatrix(generated);
     const board = createGameBoard(generated);

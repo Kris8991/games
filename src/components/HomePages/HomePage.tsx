@@ -14,7 +14,7 @@ const HomePage: React.FC = () => {
             </div>
           </Link>
 
-          <Link to="/sudocu">
+          <Link to="/sudoku">
             <div className={styles.imgContainer}>
               <img src="/images/sudoku.jpg" alt="" />
             </div>
