@@ -6,6 +6,9 @@ type CellProps = {
   cell: number | null;
   column: number;
   row: number;
+  isAccentBlock: boolean;
+  isAccentColumn: boolean;
+  isAccentRow: boolean;
   isError: boolean;
   isInitial: boolean;
   isSelected: boolean;
@@ -19,6 +22,9 @@ const Cell: React.FC<CellProps> = memo(
     cell,
     column,
     row,
+    isAccentBlock,
+    isAccentColumn,
+    isAccentRow,
     isError,
     isInitial,
     isSelected,
@@ -43,13 +49,16 @@ const Cell: React.FC<CellProps> = memo(
     };
 
     const handleClick = () => {
-      if (isInitial) return;
+      //if (isInitial) return;
       onSelect(row, column);
     };
 
     return (
       <div
         className={clsx(styles.cell, {
+          [styles.isAccentBlock]: isAccentBlock,
+          [styles.isAccentColumn]: isAccentColumn,
+          [styles.isAccentRow]: isAccentRow,
           [styles.initial]: isInitial,
           [styles.error]: isError,
           [styles.selected]: isSelected,

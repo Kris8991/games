@@ -4,7 +4,7 @@ import styles from './Sudoku.module.scss';
 import Cell from './Cell';
 import { generateSudoku, createGameBoard } from './Sudoku.utils.ts';
 import SudokuModal from './SudokuModal/SudokuModal';
-import SudokuInfo from './SudokuInfo.tsx';
+import SudokuInfo from './SudokuInfo/SudokuInfo.tsx';
 
 const Sudoku: React.FC = () => {
   const navigate = useNavigate();
@@ -144,12 +144,24 @@ const Sudoku: React.FC = () => {
           row.map((cell, columnIndex) => {
             const cellKey = `${rowIndex},${columnIndex}`;
 
+            const isAccentRow = selectedCell && selectedCell.row === rowIndex;
+            const isAccentColumn =
+              selectedCell && selectedCell.column === columnIndex;
+            const isAccentBlock =
+              selectedCell &&
+              Math.floor(selectedCell.row / 3) === Math.floor(rowIndex / 3) &&
+              Math.floor(selectedCell.column / 3) ===
+                Math.floor(columnIndex / 3);
+
             return (
               <Cell
                 key={cellKey}
                 cell={cell}
                 column={columnIndex}
                 row={rowIndex}
+                isAccentBlock={isAccentBlock}
+                isAccentColumn={isAccentColumn}
+                isAccentRow={isAccentRow}
                 isError={errorCells.has(cellKey)}
                 isInitial={initialCells.has(cellKey)}
                 isSelected={
