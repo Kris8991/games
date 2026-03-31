@@ -56,6 +56,9 @@ h1 {
       background-color: #e3f2fd;
       font-weight: 500;
     }
+    &.isAccentCell {
+      background-color: scale-color($accent, $lightness: 60%);
+    }
 
     span {
       user-select: none;

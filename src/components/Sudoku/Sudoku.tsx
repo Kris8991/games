@@ -24,6 +24,8 @@ const Sudoku: React.FC = () => {
     column: number;
   } | null>(null);
 
+  const [accentNumber, setAccentNumber] = useState<number | null>(null);
+
   const resetGame = () => {
     correctCellsCount.current = 0;
     const generated = generateSudoku();
@@ -132,9 +134,28 @@ const Sudoku: React.FC = () => {
     [helpsCount, fullMatrix, handleValueChange],
   );
 
-  const handleCellSelect = useCallback((row: number, column: number) => {
-    setSelectedCell({ row, column });
-  }, []);
+  const handleCellSelect = useCallback(
+    (row: number, column: number) => {
+      setSelectedCell({ row, column });
+
+      const clickedCellValue = gameBoard[row][column];
+      console.log(gameBoard);
+
+      if (clickedCellValue !== null) {
+        if (accentNumber === clickedCellValue) {
+          setAccentNumber(null);
+          //console.log('записываем число');
+        } else {
+          setAccentNumber(clickedCellValue);
+          console.log('записываем число');
+        }
+      } else {
+        setAccentNumber(null);
+      }
+      console.log(accentNumber);
+    },
+    [accentNumber, gameBoard],
+  );
 
   return (
     <div className={styles.container}>
@@ -159,9 +180,10 @@ const Sudoku: React.FC = () => {
                 cell={cell}
                 column={columnIndex}
                 row={rowIndex}
-                isAccentBlock={isAccentBlock}
-                isAccentColumn={isAccentColumn}
-                isAccentRow={isAccentRow}
+                isAccentBlock={!!isAccentBlock}
+                isAccentColumn={!!isAccentColumn}
+                isAccentRow={!!isAccentRow}
+                accentValue={accentNumber}
                 isError={errorCells.has(cellKey)}
                 isInitial={initialCells.has(cellKey)}
                 isSelected={

@@ -3,6 +3,7 @@ import styles from '../Sudoku.module.scss';
 import { clsx } from 'clsx';
 
 type CellProps = {
+  accentValue: number | null;
   cell: number | null;
   column: number;
   row: number;
@@ -19,6 +20,7 @@ type CellProps = {
 
 const Cell: React.FC<CellProps> = memo(
   ({
+    accentValue,
     cell,
     column,
     row,
@@ -46,6 +48,8 @@ const Cell: React.FC<CellProps> = memo(
       } else if (key === 'H' || key === 'h' || key === 'Р' || key === 'р') {
         onHelp(row, column);
       }
+
+      console.log(cell);
     };
 
     const handleClick = () => {
@@ -53,16 +57,22 @@ const Cell: React.FC<CellProps> = memo(
       onSelect(row, column);
     };
 
+    const isAccentCell =
+      accentValue !== null && cell !== null && cell === accentValue;
+
     return (
       <div
         className={clsx(styles.cell, {
           [styles.isAccentBlock]: isAccentBlock,
           [styles.isAccentColumn]: isAccentColumn,
           [styles.isAccentRow]: isAccentRow,
+
           [styles.initial]: isInitial,
           [styles.error]: isError,
           [styles.selected]: isSelected,
+
           [styles.userFilled]: !isInitial && cell !== null,
+          [styles.isAccentCell]: isAccentCell,
         })}
         onClick={handleClick}
         onKeyDown={handleKeyPress}
