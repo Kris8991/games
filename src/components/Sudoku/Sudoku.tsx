@@ -55,6 +55,7 @@ const Sudoku: React.FC = () => {
   useEffect(() => {
     const generated = generateSudoku();
     setFullMatrix(generated);
+    console.log(generated);
     const board = createGameBoard(generated);
     setGameBoard(board);
     const initials = new Set<string>();
