@@ -19,16 +19,15 @@ h1 {
   .cell {
     width: 100%;
     aspect-ratio: 1;
-    //display: flex;
     border: 1px solid #ccc;
     @include flex-center;
     font-size: 20px;
+    font-weight: bold;
     cursor: pointer;
     background-color: white;
     color: #2c3e50;
     transition: all 0.2s;
     user-select: none;
-    //outline: none;
 
     &.isAccentBlock,
     &.isAccentColumn,
@@ -44,18 +43,13 @@ h1 {
       border: 2ppx solid $primary-dark;
     }
     &.initial {
-      //background-color: #e8e8e8;
-      font-weight: bold;
       color: #2c3e50;
       cursor: default;
     }
     &.error {
       color: red;
     }
-    &.userFilled {
-      background-color: #e3f2fd;
-      font-weight: 500;
-    }
+
     &.isAccentCell {
       background-color: scale-color($accent, $lightness: 60%);
     }
@@ -76,22 +70,59 @@ h1 {
   }
 }
 .recordsContainer {
-  position: absolute;
-  right: -40px;
-  top: 250px;
-  @include flex-center;
-  flex-direction: column;
-  //gap: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  margin: 0.5rem 0;
+
   animation: slideIn 0.5s ease;
-  @include respond-to(tablet) {
-    position: static;
-  }
   h3 {
     margin: 0;
     color: $text-dark;
     text-shadow: $shadow-lg;
   }
-  p {
-    margin: 0;
+}
+
+.mobilePanel {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 500px;
+  width: 100%;
+  margin-top: 20px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 12px;
+  @media (max-width: 769px) {
+    display: flex;
+  }
+  // @media (hover: none) and (pointer: coarse)
+  & button {
+    background: none;
+    border: none;
+    animation: none;
+    color: #2c3e50;
+    font-size: 20px;
+  }
+  .numberPad {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(30px, 70px));
+    max-width: 900px;
+    & button {
+      background: none;
+      border: none;
+      animation: none;
+      color: #2c3e50;
+      padding: 0;
+    }
+  }
+  .actionButtons {
+    display: flex;
+    justify-content: space-around;
+    & button {
+      padding: 0.25rem;
+    }
   }
 }

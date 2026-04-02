@@ -48,12 +48,9 @@ const Cell: React.FC<CellProps> = memo(
       } else if (key === 'H' || key === 'h' || key === 'Р' || key === 'р') {
         onHelp(row, column);
       }
-
-      console.log(cell);
     };
 
     const handleClick = () => {
-      //if (isInitial) return;
       onSelect(row, column);
     };
 
@@ -70,8 +67,6 @@ const Cell: React.FC<CellProps> = memo(
           [styles.initial]: isInitial,
           [styles.error]: isError,
           [styles.selected]: isSelected,
-
-          [styles.userFilled]: !isInitial && cell !== null,
           [styles.isAccentCell]: isAccentCell,
         })}
         onClick={handleClick}
