@@ -95,10 +95,10 @@ h1 {
   padding: 16px;
   background-color: white;
   border-radius: 12px;
-  @media (max-width: 769px) {
+  @media (hover: none) and (pointer: coarse) {
     display: flex;
   }
-  // @media (hover: none) and (pointer: coarse)
+
   & button {
     background: none;
     border: none;
