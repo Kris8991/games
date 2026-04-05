@@ -28,18 +28,14 @@ const Sudoku: React.FC = () => {
 
   const accentNumberRef = useRef(accentNumber);
   const correctCellsCount = useRef(0);
-  const fullMatrixRef = useRef(fullMatrix);
   const gameBoardRef = useRef(gameBoard);
   const helpsCountsRef = useRef(helpsCount);
-  const initialCellsRef = useRef(initialCells);
   const selectedCellRef = useRef(selectedCell);
 
   useEffect(() => {
     accentNumberRef.current = accentNumber;
-    fullMatrixRef.current = fullMatrix;
     gameBoardRef.current = gameBoard;
     helpsCountsRef.current = helpsCount;
-    initialCellsRef.current = initialCells;
     selectedCellRef.current = selectedCell;
   }, [
     accentNumber,
@@ -93,7 +89,6 @@ const Sudoku: React.FC = () => {
   const handleValueChange = useCallback(
     (row: number, column: number, value: number | null) => {
       const cellKey = `${row},${column}`;
-      const currentfullMatrix = fullMatrixRef.current;
       setGameBoard((prevGameBoard) => {
         const currentValue = prevGameBoard[row]?.[column];
         if (currentValue === value) return prevGameBoard;
@@ -104,8 +99,7 @@ const Sudoku: React.FC = () => {
       });
 
       const isEmpty = value === null;
-      const isCorrect =
-        value !== null && value === currentfullMatrix[row][column];
+      const isCorrect = value !== null && value === fullMatrix[row][column];
 
       setErrorCells((prevErrors) => {
         const wasError = prevErrors.has(cellKey);
@@ -142,14 +136,12 @@ const Sudoku: React.FC = () => {
         }, 0);
       }
     },
-    [],
+    [fullMatrix],
   );
 
   const handleHelp = useCallback(
     (row: number, column: number) => {
-      const currentfullMatrix = fullMatrixRef.current;
-
-      const correctValue = currentfullMatrix[row][column];
+      const correctValue = fullMatrix[row][column];
       const currenthelpsCounts = helpsCountsRef.current;
 
       if (currenthelpsCounts <= 0) {
@@ -159,7 +151,7 @@ const Sudoku: React.FC = () => {
       setHelpsCount((prev) => prev - 1);
       handleValueChange(row, column, correctValue);
     },
-    [handleValueChange],
+    [fullMatrix, handleValueChange],
   );
 
   const handleCellSelect = useCallback((row: number, column: number) => {
@@ -195,10 +187,8 @@ const Sudoku: React.FC = () => {
 
   const handleHelpButton = useCallback(() => {
     const currentSelectedCell = selectedCellRef.current;
-    const currentinitialCells = initialCellsRef.current;
-
     const isInitialSelected = currentSelectedCell
-      ? currentinitialCells.has(
+      ? initialCells.has(
           `${currentSelectedCell.row},${currentSelectedCell.column}`,
         )
       : false;
@@ -209,14 +199,12 @@ const Sudoku: React.FC = () => {
     } else {
       alert('Сначала выберите ячейку');
     }
-  }, [handleHelp]);
+  }, [handleHelp, initialCells]);
 
   const handleEraseButton = useCallback(() => {
     const currentSelectedCell = selectedCellRef.current;
-    const currentinitialCells = initialCellsRef.current;
-
     const isInitialSelected = currentSelectedCell
-      ? currentinitialCells.has(
+      ? initialCells.has(
           `${currentSelectedCell.row},${currentSelectedCell.column}`,
         )
       : false;
@@ -225,7 +213,7 @@ const Sudoku: React.FC = () => {
       if (isInitialSelected) return;
       handleValueChange(row, column, null);
     }
-  }, [handleValueChange]);
+  }, [handleValueChange, initialCells]);
 
   return (
     <div className={styles.container}>
