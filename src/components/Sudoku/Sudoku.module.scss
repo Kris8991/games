@@ -1,5 +1,5 @@
 @use '../MemoryGame/styles/index' as *;
-
+@use 'sass:color';
 h1 {
   color: white;
   margin-bottom: 0px;
@@ -32,7 +32,7 @@ h1 {
     &.isAccentBlock,
     &.isAccentColumn,
     &.isAccentRow {
-      background-color: scale-color($primary, $lightness: 80%);
+      background-color: color.scale($primary, $lightness: 80%);
     }
 
     &:hover:not(.initial, .selected) {
@@ -51,7 +51,7 @@ h1 {
     }
 
     &.isAccentCell {
-      background-color: scale-color($accent, $lightness: 60%);
+      background-color: color.scale($accent, $lightness: 60%);
     }
 
     span {

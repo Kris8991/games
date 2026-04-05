@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import styles from '../Sudoku.module.scss';
-import { TfiHelp } from 'react-icons/tfi';
-import { TfiEraser } from 'react-icons/tfi';
+import { TfiEraser, TfiHelp } from 'react-icons/tfi';
+import {} from 'react-icons/tfi';
 
 type MobileControlsProps = {
   helpsCount: number;

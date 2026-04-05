@@ -25,11 +25,32 @@ const Sudoku: React.FC = () => {
     row: number;
     column: number;
   } | null>(null);
+
+  const accentNumberRef = useRef(accentNumber);
   const correctCellsCount = useRef(0);
+  const fullMatrixRef = useRef(fullMatrix);
+  const gameBoardRef = useRef(gameBoard);
+  const helpsCountsRef = useRef(helpsCount);
+  const initialCellsRef = useRef(initialCells);
   const selectedCellRef = useRef(selectedCell);
 
+  useEffect(() => {
+    accentNumberRef.current = accentNumber;
+    fullMatrixRef.current = fullMatrix;
+    gameBoardRef.current = gameBoard;
+    helpsCountsRef.current = helpsCount;
+    initialCellsRef.current = initialCells;
+    selectedCellRef.current = selectedCell;
+  }, [
+    accentNumber,
+    fullMatrix,
+    gameBoard,
+    helpsCount,
+    initialCells,
+    selectedCell,
+  ]);
+
   const resetGame = () => {
-    correctCellsCount.current = 0;
     const generated = generateSudoku();
     setFullMatrix(generated);
     const board = createGameBoard(generated);
@@ -43,19 +64,19 @@ const Sudoku: React.FC = () => {
         }
       });
     });
-
     setInitialCells(initials);
     setErrorCells(new Set());
     setSelectedCell(null);
     setHelpsCount(3);
     setErrorsCount(0);
     setIsModalActive(false);
+    correctCellsCount.current = 0;
+    helpsCountsRef.current = helpsCount;
   };
 
   useEffect(() => {
     const generated = generateSudoku();
     setFullMatrix(generated);
-    console.log(generated);
     const board = createGameBoard(generated);
     setGameBoard(board);
     const initials = new Set<string>();
@@ -66,14 +87,13 @@ const Sudoku: React.FC = () => {
         }
       });
     });
-
     setInitialCells(initials);
   }, []);
 
   const handleValueChange = useCallback(
     (row: number, column: number, value: number | null) => {
       const cellKey = `${row},${column}`;
-
+      const currentfullMatrix = fullMatrixRef.current;
       setGameBoard((prevGameBoard) => {
         const currentValue = prevGameBoard[row]?.[column];
         if (currentValue === value) return prevGameBoard;
@@ -84,7 +104,8 @@ const Sudoku: React.FC = () => {
       });
 
       const isEmpty = value === null;
-      const isCorrect = value !== null && value === fullMatrix[row][column];
+      const isCorrect =
+        value !== null && value === currentfullMatrix[row][column];
 
       setErrorCells((prevErrors) => {
         const wasError = prevErrors.has(cellKey);
@@ -121,52 +142,48 @@ const Sudoku: React.FC = () => {
         }, 0);
       }
     },
-    [fullMatrix],
+    [],
   );
 
   const handleHelp = useCallback(
     (row: number, column: number) => {
-      const correctValue = fullMatrix[row][column];
-      if (helpsCount <= 0) {
+      const currentfullMatrix = fullMatrixRef.current;
+
+      const correctValue = currentfullMatrix[row][column];
+      const currenthelpsCounts = helpsCountsRef.current;
+
+      if (currenthelpsCounts <= 0) {
         alert('Подсказки закончились');
         return;
       }
       setHelpsCount((prev) => prev - 1);
       handleValueChange(row, column, correctValue);
     },
-    [helpsCount, fullMatrix, handleValueChange],
+    [handleValueChange],
   );
 
-  const handleCellSelect = useCallback(
-    (row: number, column: number) => {
-      setSelectedCell({ row, column });
+  const handleCellSelect = useCallback((row: number, column: number) => {
+    setSelectedCell({ row, column });
+    const currentaccentNumber = accentNumberRef.current;
+    const currentgameBoard = gameBoardRef.current;
 
-      const clickedCellValue = gameBoard[row][column];
+    const clickedCellValue = currentgameBoard[row][column];
 
-      if (clickedCellValue !== null) {
-        if (accentNumber === clickedCellValue) {
-          setAccentNumber(null);
-        } else {
-          setAccentNumber(clickedCellValue);
-        }
+    if (clickedCellValue !== null) {
+      if (currentaccentNumber === clickedCellValue) {
+        return;
       } else {
-        setAccentNumber(null);
+        setAccentNumber(clickedCellValue);
       }
-    },
-    [accentNumber, gameBoard],
-  );
-
-  const isInitialSelected = selectedCell
-    ? initialCells.has(`${selectedCell.row},${selectedCell.column}`)
-    : false;
-
-  useEffect(() => {
-    selectedCellRef.current = selectedCell;
-  }, [selectedCell]);
+    } else {
+      setAccentNumber(null);
+    }
+  }, []);
 
   const handleNumberInput = useCallback(
     (value: number | null) => {
       const currentSelectedCell = selectedCellRef.current;
+
       if (currentSelectedCell) {
         const { row, column } = currentSelectedCell;
         if (!currentSelectedCell) return;
@@ -178,6 +195,13 @@ const Sudoku: React.FC = () => {
 
   const handleHelpButton = useCallback(() => {
     const currentSelectedCell = selectedCellRef.current;
+    const currentinitialCells = initialCellsRef.current;
+
+    const isInitialSelected = currentSelectedCell
+      ? currentinitialCells.has(
+          `${currentSelectedCell.row},${currentSelectedCell.column}`,
+        )
+      : false;
     if (currentSelectedCell) {
       const { row, column } = currentSelectedCell;
       if (isInitialSelected) return;
@@ -185,16 +209,23 @@ const Sudoku: React.FC = () => {
     } else {
       alert('Сначала выберите ячейку');
     }
-  }, [handleHelp, isInitialSelected]);
+  }, [handleHelp]);
 
   const handleEraseButton = useCallback(() => {
     const currentSelectedCell = selectedCellRef.current;
+    const currentinitialCells = initialCellsRef.current;
+
+    const isInitialSelected = currentSelectedCell
+      ? currentinitialCells.has(
+          `${currentSelectedCell.row},${currentSelectedCell.column}`,
+        )
+      : false;
     if (currentSelectedCell) {
       const { row, column } = currentSelectedCell;
       if (isInitialSelected) return;
       handleValueChange(row, column, null);
     }
-  }, [isInitialSelected, handleValueChange]);
+  }, [handleValueChange]);
 
   return (
     <div className={styles.container}>
