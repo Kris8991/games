@@ -4,13 +4,15 @@ import styles from './Sudoku.module.scss';
 import Cell from './Cell';
 import { generateSudoku, createGameBoard } from './Sudoku.utils.ts';
 import SudokuModal from './SudokuModal/SudokuModal';
-import SudokuInfo from './SudokuInfo.tsx';
+import SudokuInfo from './SudokuInfo/SudokuInfo.tsx';
+import MobileControls from './MobileControls/MobileControls.tsx';
+import { TfiArrowCircleLeft } from 'react-icons/tfi';
 
 const Sudoku: React.FC = () => {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
 
-  const correctCellsCount = useRef(0);
+  const [accentNumber, setAccentNumber] = useState<number | null>(null);
   const [errorCells, setErrorCells] = useState<Set<string>>(new Set());
   const [errorsCount, setErrorsCount] = useState<number>(0);
   const [fullMatrix, setFullMatrix] = useState<number[][]>([]);
@@ -24,8 +26,27 @@ const Sudoku: React.FC = () => {
     column: number;
   } | null>(null);
 
+  const accentNumberRef = useRef(accentNumber);
+  const correctCellsCount = useRef(0);
+  const gameBoardRef = useRef(gameBoard);
+  const helpsCountsRef = useRef(helpsCount);
+  const selectedCellRef = useRef(selectedCell);
+
+  useEffect(() => {
+    accentNumberRef.current = accentNumber;
+    gameBoardRef.current = gameBoard;
+    helpsCountsRef.current = helpsCount;
+    selectedCellRef.current = selectedCell;
+  }, [
+    accentNumber,
+    fullMatrix,
+    gameBoard,
+    helpsCount,
+    initialCells,
+    selectedCell,
+  ]);
+
   const resetGame = () => {
-    correctCellsCount.current = 0;
     const generated = generateSudoku();
     setFullMatrix(generated);
     const board = createGameBoard(generated);
@@ -39,13 +60,14 @@ const Sudoku: React.FC = () => {
         }
       });
     });
-
     setInitialCells(initials);
     setErrorCells(new Set());
     setSelectedCell(null);
     setHelpsCount(3);
     setErrorsCount(0);
     setIsModalActive(false);
+    correctCellsCount.current = 0;
+    helpsCountsRef.current = helpsCount;
   };
 
   useEffect(() => {
@@ -61,14 +83,12 @@ const Sudoku: React.FC = () => {
         }
       });
     });
-
     setInitialCells(initials);
   }, []);
 
   const handleValueChange = useCallback(
     (row: number, column: number, value: number | null) => {
       const cellKey = `${row},${column}`;
-
       setGameBoard((prevGameBoard) => {
         const currentValue = prevGameBoard[row]?.[column];
         if (currentValue === value) return prevGameBoard;
@@ -122,27 +142,95 @@ const Sudoku: React.FC = () => {
   const handleHelp = useCallback(
     (row: number, column: number) => {
       const correctValue = fullMatrix[row][column];
-      if (helpsCount <= 0) {
+      const currenthelpsCounts = helpsCountsRef.current;
+
+      if (currenthelpsCounts <= 0) {
         alert('Подсказки закончились');
         return;
       }
       setHelpsCount((prev) => prev - 1);
       handleValueChange(row, column, correctValue);
     },
-    [helpsCount, fullMatrix, handleValueChange],
+    [fullMatrix, handleValueChange],
   );
 
   const handleCellSelect = useCallback((row: number, column: number) => {
     setSelectedCell({ row, column });
+    const currentaccentNumber = accentNumberRef.current;
+    const currentgameBoard = gameBoardRef.current;
+
+    const clickedCellValue = currentgameBoard[row][column];
+
+    if (clickedCellValue !== null) {
+      if (currentaccentNumber === clickedCellValue) {
+        return;
+      } else {
+        setAccentNumber(clickedCellValue);
+      }
+    } else {
+      setAccentNumber(null);
+    }
   }, []);
+
+  const handleNumberInput = useCallback(
+    (value: number | null) => {
+      const currentSelectedCell = selectedCellRef.current;
+
+      if (currentSelectedCell) {
+        const { row, column } = currentSelectedCell;
+        if (!currentSelectedCell) return;
+        handleValueChange(row, column, value);
+      }
+    },
+    [handleValueChange],
+  );
+
+  const handleHelpButton = useCallback(() => {
+    const currentSelectedCell = selectedCellRef.current;
+    const isInitialSelected = currentSelectedCell
+      ? initialCells.has(
+          `${currentSelectedCell.row},${currentSelectedCell.column}`,
+        )
+      : false;
+    if (currentSelectedCell) {
+      const { row, column } = currentSelectedCell;
+      if (isInitialSelected) return;
+      handleHelp(row, column);
+    } else {
+      alert('Сначала выберите ячейку');
+    }
+  }, [handleHelp, initialCells]);
+
+  const handleEraseButton = useCallback(() => {
+    const currentSelectedCell = selectedCellRef.current;
+    const isInitialSelected = currentSelectedCell
+      ? initialCells.has(
+          `${currentSelectedCell.row},${currentSelectedCell.column}`,
+        )
+      : false;
+    if (currentSelectedCell) {
+      const { row, column } = currentSelectedCell;
+      if (isInitialSelected) return;
+      handleValueChange(row, column, null);
+    }
+  }, [handleValueChange, initialCells]);
 
   return (
     <div className={styles.container}>
-      <h1>Sudoku</h1>
+      <SudokuInfo errorCount={errorsCount} helpsCount={helpsCount} />
       <div className={styles.sudokuGrid}>
         {gameBoard.map((row, rowIndex) =>
           row.map((cell, columnIndex) => {
             const cellKey = `${rowIndex},${columnIndex}`;
+
+            const isAccentRow = selectedCell && selectedCell.row === rowIndex;
+            const isAccentColumn =
+              selectedCell && selectedCell.column === columnIndex;
+            const isAccentBlock =
+              selectedCell &&
+              Math.floor(selectedCell.row / 3) === Math.floor(rowIndex / 3) &&
+              Math.floor(selectedCell.column / 3) ===
+                Math.floor(columnIndex / 3);
 
             return (
               <Cell
@@ -150,6 +238,10 @@ const Sudoku: React.FC = () => {
                 cell={cell}
                 column={columnIndex}
                 row={rowIndex}
+                isAccentBlock={!!isAccentBlock}
+                isAccentColumn={!!isAccentColumn}
+                isAccentRow={!!isAccentRow}
+                accentValue={accentNumber}
                 isError={errorCells.has(cellKey)}
                 isInitial={initialCells.has(cellKey)}
                 isSelected={
@@ -164,15 +256,20 @@ const Sudoku: React.FC = () => {
           }),
         )}
       </div>
+      <MobileControls
+        helpsCount={helpsCount}
+        onNumberInput={handleNumberInput}
+        onErase={handleEraseButton}
+        onHelp={handleHelpButton}
+      />
       <button className={styles.goBack} onClick={goBack}>
-        ◀️ К выбору игры
+        <TfiArrowCircleLeft /> К выбору игры
       </button>
       <SudokuModal
         isActive={isModalActive}
         message={modalMessage}
         onNewGame={resetGame}
       />
-      <SudokuInfo errorCount={errorsCount} helpsCount={helpsCount} />
     </div>
   );
 };

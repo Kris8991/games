@@ -3,9 +3,13 @@ import styles from '../Sudoku.module.scss';
 import { clsx } from 'clsx';
 
 type CellProps = {
+  accentValue: number | null;
   cell: number | null;
   column: number;
   row: number;
+  isAccentBlock: boolean;
+  isAccentColumn: boolean;
+  isAccentRow: boolean;
   isError: boolean;
   isInitial: boolean;
   isSelected: boolean;
@@ -14,11 +18,43 @@ type CellProps = {
   onSelect: (row: number, column: number) => void;
 };
 
+const areCellsEqual = (prevProps: CellProps, nextProps: CellProps): boolean => {
+  if (
+    prevProps.cell !== nextProps.cell ||
+    prevProps.column !== nextProps.column ||
+    prevProps.row !== nextProps.row ||
+    prevProps.isAccentBlock !== nextProps.isAccentBlock ||
+    prevProps.isAccentColumn !== nextProps.isAccentColumn ||
+    prevProps.isAccentRow !== nextProps.isAccentRow ||
+    prevProps.isError !== nextProps.isError ||
+    prevProps.isInitial !== nextProps.isInitial ||
+    prevProps.isSelected !== nextProps.isSelected ||
+    prevProps.onChange !== nextProps.onChange ||
+    prevProps.onHelp !== nextProps.onHelp ||
+    prevProps.onSelect !== nextProps.onSelect
+  ) {
+    return false;
+  }
+  const prevIsAccentValue =
+    prevProps.cell !== null && prevProps.cell === prevProps.accentValue;
+  const nextIsAccentValue =
+    nextProps.cell !== null && nextProps.cell === nextProps.accentValue;
+
+  if (prevIsAccentValue !== nextIsAccentValue) {
+    return false;
+  }
+  return true;
+};
+
 const Cell: React.FC<CellProps> = memo(
   ({
+    accentValue,
     cell,
     column,
     row,
+    isAccentBlock,
+    isAccentColumn,
+    isAccentRow,
     isError,
     isInitial,
     isSelected,
@@ -43,17 +79,23 @@ const Cell: React.FC<CellProps> = memo(
     };
 
     const handleClick = () => {
-      if (isInitial) return;
       onSelect(row, column);
     };
+
+    const isAccentCell =
+      accentValue !== null && cell !== null && cell === accentValue;
 
     return (
       <div
         className={clsx(styles.cell, {
+          [styles.isAccentBlock]: isAccentBlock,
+          [styles.isAccentColumn]: isAccentColumn,
+          [styles.isAccentRow]: isAccentRow,
+
           [styles.initial]: isInitial,
           [styles.error]: isError,
           [styles.selected]: isSelected,
-          [styles.userFilled]: !isInitial && cell !== null,
+          [styles.isAccentCell]: isAccentCell,
         })}
         onClick={handleClick}
         onKeyDown={handleKeyPress}
@@ -63,6 +105,7 @@ const Cell: React.FC<CellProps> = memo(
       </div>
     );
   },
+  areCellsEqual,
 );
 
 export default Cell;
