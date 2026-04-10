@@ -1,30 +1,47 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Sudoku.module.scss';
 import Cell from './Cell';
 import { generateSudoku, createGameBoard } from './Sudoku.utils.ts';
 import SudokuModal from './SudokuModal/SudokuModal';
-import SudokuInfo from './SudokuInfo/SudokuInfo.tsx';
-import MobileControls from './MobileControls/MobileControls.tsx';
+import SudokuInfo from './SudokuInfo';
+import MobileControls from './MobileControls';
 import { TfiArrowCircleLeft } from 'react-icons/tfi';
+import { useGameState } from '../../state/gameState';
 
 const Sudoku: React.FC = () => {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
 
-  const [accentNumber, setAccentNumber] = useState<number | null>(null);
-  const [errorCells, setErrorCells] = useState<Set<string>>(new Set());
-  const [errorsCount, setErrorsCount] = useState<number>(0);
-  const [fullMatrix, setFullMatrix] = useState<number[][]>([]);
-  const [gameBoard, setGameBoard] = useState<(number | null)[][]>([]);
-  const [helpsCount, setHelpsCount] = useState<number>(3);
-  const [initialCells, setInitialCells] = useState<Set<string>>(new Set());
-  const [isModalActive, setIsModalActive] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-  const [selectedCell, setSelectedCell] = useState<{
-    row: number;
-    column: number;
-  } | null>(null);
+  const accentNumber = useGameState((state) => state.accentNumber);
+  const setAccentNumber = useGameState((state) => state.setAccentNumber);
+
+  const errorCells = useGameState((state) => state.errorCells);
+  const setErrorCells = useGameState((state) => state.setErrorCells);
+
+  const errorsCount = useGameState((state) => state.errorsCount);
+  const setErrorsCount = useGameState((state) => state.setErrorsCount);
+
+  const fullMatrix = useGameState((state) => state.fullMatrix);
+  const setFullMatrix = useGameState((state) => state.setFullMatrix);
+
+  const gameBoard = useGameState((state) => state.gameBoard);
+  const setGameBoard = useGameState((state) => state.setGameBoard);
+
+  const helpsCount = useGameState((state) => state.helpsCount);
+  const setHelpsCount = useGameState((state) => state.setHelpsCount);
+
+  const initialCells = useGameState((state) => state.initialCells);
+  const setInitialCells = useGameState((state) => state.setInitialCells);
+
+  const isModalActive = useGameState((state) => state.isModalActive);
+  const setIsModalActive = useGameState((state) => state.setIsModalActive);
+
+  const modalMessage = useGameState((state) => state.modalMessage);
+  const setModalMessage = useGameState((state) => state.setModalMessage);
+
+  const selectedCell = useGameState((state) => state.selectedCell);
+  const setSelectedCell = useGameState((state) => state.setSelectedCell);
 
   const accentNumberRef = useRef(accentNumber);
   const correctCellsCount = useRef(0);
@@ -50,7 +67,7 @@ const Sudoku: React.FC = () => {
     const generated = generateSudoku();
     setFullMatrix(generated);
     const board = createGameBoard(generated);
-    setGameBoard(board);
+    setGameBoard(() => board);
 
     const initials = new Set<string>();
     board.forEach((row, i) => {
@@ -60,11 +77,11 @@ const Sudoku: React.FC = () => {
         }
       });
     });
-    setInitialCells(initials);
-    setErrorCells(new Set());
+    setInitialCells(() => initials);
+    setErrorCells(() => new Set());
     setSelectedCell(null);
-    setHelpsCount(3);
-    setErrorsCount(0);
+    setHelpsCount(() => 3);
+    setErrorsCount(() => 0);
     setIsModalActive(false);
     correctCellsCount.current = 0;
     helpsCountsRef.current = helpsCount;
@@ -74,7 +91,7 @@ const Sudoku: React.FC = () => {
     const generated = generateSudoku();
     setFullMatrix(generated);
     const board = createGameBoard(generated);
-    setGameBoard(board);
+    setGameBoard(() => board);
     const initials = new Set<string>();
     board.forEach((row, i) => {
       row.forEach((cell, j) => {
@@ -83,8 +100,8 @@ const Sudoku: React.FC = () => {
         }
       });
     });
-    setInitialCells(initials);
-  }, []);
+    setInitialCells(() => initials);
+  }, [setFullMatrix, setGameBoard, setInitialCells]);
 
   const handleValueChange = useCallback(
     (row: number, column: number, value: number | null) => {
@@ -136,7 +153,14 @@ const Sudoku: React.FC = () => {
         }, 0);
       }
     },
-    [fullMatrix],
+    [
+      fullMatrix,
+      setErrorCells,
+      setErrorsCount,
+      setGameBoard,
+      setIsModalActive,
+      setModalMessage,
+    ],
   );
 
   const handleHelp = useCallback(
@@ -151,26 +175,29 @@ const Sudoku: React.FC = () => {
       setHelpsCount((prev) => prev - 1);
       handleValueChange(row, column, correctValue);
     },
-    [fullMatrix, handleValueChange],
+    [fullMatrix, handleValueChange, setHelpsCount],
   );
 
-  const handleCellSelect = useCallback((row: number, column: number) => {
-    setSelectedCell({ row, column });
-    const currentaccentNumber = accentNumberRef.current;
-    const currentgameBoard = gameBoardRef.current;
+  const handleCellSelect = useCallback(
+    (row: number, column: number) => {
+      setSelectedCell({ row, column });
+      const currentaccentNumber = accentNumberRef.current;
+      const currentgameBoard = gameBoardRef.current;
 
-    const clickedCellValue = currentgameBoard[row][column];
+      const clickedCellValue = currentgameBoard[row][column];
 
-    if (clickedCellValue !== null) {
-      if (currentaccentNumber === clickedCellValue) {
-        return;
+      if (clickedCellValue !== null) {
+        if (currentaccentNumber === clickedCellValue) {
+          return;
+        } else {
+          setAccentNumber(clickedCellValue);
+        }
       } else {
-        setAccentNumber(clickedCellValue);
+        setAccentNumber(null);
       }
-    } else {
-      setAccentNumber(null);
-    }
-  }, []);
+    },
+    [setAccentNumber, setSelectedCell],
+  );
 
   const handleNumberInput = useCallback(
     (value: number | null) => {
