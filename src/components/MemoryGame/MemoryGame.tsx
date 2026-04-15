@@ -10,30 +10,21 @@ import { useTimer } from './Timer';
 import styles from '../MemoryGame/GameBoard/GameBoard.module.scss';
 import BestTimes from './BestTimes';
 import { useNavigate } from 'react-router-dom';
-import memoryState from '../../state/gameState/memoryState';
-import { observer } from 'mobx-react-lite';
 
 const TOTAL_NORMAL = 16;
 const TOTAL_HARD = 36;
-const MemoryGame: React.FC = observer(() => {
-  const { displayTime, start, reset, stop } = useTimer();
-  const firstCardId = useRef<string>('');
+const MemoryGame: React.FC = () => {
+  const [bestTimes, setBestTimes] = useState<string[]>([]);
   const [cards, setCards] = useState(matrix);
-  const [flippedCards, setFlippeCards] = useState<string[]>([]);
+  const [difficulty, setDifficulty] = useState<Difficulty>('normal');
+  const [gameStarted, setGameStarted] = useState(false);
+  const [flippedCards, setFlippedCards] = useState<string[]>([]);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
-  const {
-    bestTimes,
-    f,
-    so,
-    gameStarted,
-    g,
-    difficulty,
-    c,
-    isModalActive,
-    cm,
-    isDisabled,
-    cd,
-  } = memoryState;
+  const { displayTime, start, reset, stop } = useTimer();
+
+  const firstCardId = useRef<string>('');
 
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
@@ -41,27 +32,27 @@ const MemoryGame: React.FC = observer(() => {
   useEffect(() => {
     const saved = localStorage.getItem('bestTimes');
     if (saved) {
-      f(saved);
+      setBestTimes(JSON.parse(saved));
     }
-    return () => g(false);
-  }, [f, g]);
+    return setGameStarted(false);
+  }, []);
 
   const handleDifficultyChange = (newDifficulty: Difficulty) => {
     reset();
-    c(newDifficulty);
+    setDifficulty(newDifficulty);
     setCards(generateMatrix(newDifficulty));
-    setFlippeCards([]);
+    setFlippedCards([]);
     firstCardId.current = '';
-    g(true);
-    cm(false);
+    setGameStarted(true);
+    setIsModalActive(false);
   };
 
   const handleNewGameStart = (): void => {
     reset();
     setCards(generateMatrix(difficulty));
-    setFlippeCards([]);
+    setFlippedCards([]);
     firstCardId.current = '';
-    cm(false);
+    setIsModalActive(false);
   };
 
   const handleClick = (rowIndex: number, index: number) => {
@@ -75,11 +66,11 @@ const MemoryGame: React.FC = observer(() => {
 
     if (firstCardId.current === '') {
       firstCardId.current = cardId;
-      setFlippeCards((prevValue) => [...prevValue, firstCardId.current]);
+      setFlippedCards((prevValue) => [...prevValue, firstCardId.current]);
       return;
     }
 
-    setFlippeCards((prevValue) => {
+    setFlippedCards((prevValue) => {
       const updateCards = [...prevValue, cardId];
 
       if (totalCards === updateCards.length) {
@@ -88,7 +79,7 @@ const MemoryGame: React.FC = observer(() => {
           if (totalCards === updateCards.length) {
             saveBestTime(displayTime);
           }
-          cm(true);
+          setIsModalActive(true);
         }, 100);
       }
       return updateCards;
@@ -99,19 +90,19 @@ const MemoryGame: React.FC = observer(() => {
     const secondCard = cards[rowIndex][index].value;
 
     if (firstCard !== secondCard) {
-      cd(true);
+      setIsDisabled(true);
 
       const firstCardIdRef = firstCardId.current;
       const secondCardId = cardId;
 
       setTimeout(() => {
-        setFlippeCards((prevValue) =>
+        setFlippedCards((prevValue) =>
           prevValue.filter(
             (id) => id !== firstCardIdRef && id !== secondCardId,
           ),
         );
         firstCardId.current = '';
-        cd(false);
+        setIsDisabled(false);
       }, 1000);
       return;
     }
@@ -127,7 +118,7 @@ const MemoryGame: React.FC = observer(() => {
     current.push(newTime);
     current.sort((a, b) => timeToSeconds(a) - timeToSeconds(b));
     const top3 = current.slice(0, 3);
-    so(top3);
+    setBestTimes(top3);
     localStorage.setItem('bestTimes', JSON.stringify(top3));
   };
   return (
@@ -162,6 +153,6 @@ const MemoryGame: React.FC = observer(() => {
       </button>
     </div>
   );
-});
+};
 
 export default MemoryGame;

@@ -13,35 +13,28 @@ const Sudoku: React.FC = () => {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
 
-  const accentNumber = useGameState((state) => state.accentNumber);
-  const setAccentNumber = useGameState((state) => state.setAccentNumber);
-
-  const errorCells = useGameState((state) => state.errorCells);
-  const setErrorCells = useGameState((state) => state.setErrorCells);
-
-  const errorsCount = useGameState((state) => state.errorsCount);
-  const setErrorsCount = useGameState((state) => state.setErrorsCount);
-
-  const fullMatrix = useGameState((state) => state.fullMatrix);
-  const setFullMatrix = useGameState((state) => state.setFullMatrix);
-
-  const gameBoard = useGameState((state) => state.gameBoard);
-  const setGameBoard = useGameState((state) => state.setGameBoard);
-
-  const helpsCount = useGameState((state) => state.helpsCount);
-  const setHelpsCount = useGameState((state) => state.setHelpsCount);
-
-  const initialCells = useGameState((state) => state.initialCells);
-  const setInitialCells = useGameState((state) => state.setInitialCells);
-
-  const isModalActive = useGameState((state) => state.isModalActive);
-  const setIsModalActive = useGameState((state) => state.setIsModalActive);
-
-  const modalMessage = useGameState((state) => state.modalMessage);
-  const setModalMessage = useGameState((state) => state.setModalMessage);
-
-  const selectedCell = useGameState((state) => state.selectedCell);
-  const setSelectedCell = useGameState((state) => state.setSelectedCell);
+  const {
+    accentNumber,
+    errorCells,
+    errorsCount,
+    fullMatrix,
+    gameBoard,
+    helpsCount,
+    initialCells,
+    isModalActive,
+    modalMessage,
+    selectedCell,
+    setAccentNumber,
+    setErrorCells,
+    setErrorsCount,
+    setFullMatrix,
+    setGameBoard,
+    setHelpsCount,
+    setInitialCells,
+    setIsModalActive,
+    setModalMessage,
+    setSelectedCell,
+  } = useGameState();
 
   const accentNumberRef = useRef(accentNumber);
   const correctCellsCount = useRef(0);

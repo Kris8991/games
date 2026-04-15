@@ -15,18 +15,18 @@ type GameState = {
     column: number;
   } | null;
 
-  setAccentNumber: (accent: number | null) => void;
-  setErrorCells: (updater: (prev: Set<string>) => Set<string>) => void;
-  setErrorsCount: (updater: (prev: number) => number) => void;
-  setFullMatrix: (matrix: number[][]) => void;
-  setGameBoard: (
+  setAccentNumber(accent: number | null): void;
+  setErrorCells(updater: (prev: Set<string>) => Set<string>): void;
+  setErrorsCount(updater: (prev: number) => number): void;
+  setFullMatrix(matrix: number[][]): void;
+  setGameBoard(
     updater: (prev: (number | null)[][]) => (number | null)[][],
-  ) => void;
-  setHelpsCount: (updater: (prev: number) => number) => void;
-  setInitialCells: (updater: (prev: Set<string>) => Set<string>) => void;
-  setIsModalActive: (active: boolean) => void;
-  setModalMessage: (message: string) => void;
-  setSelectedCell: (selected: { row: number; column: number } | null) => void;
+  ): void;
+  setHelpsCount(updater: (prev: number) => number): void;
+  setInitialCells(updater: (prev: Set<string>) => Set<string>): void;
+  setIsModalActive(active: boolean): void;
+  setModalMessage(message: string): void;
+  setSelectedCell(selected: { row: number; column: number } | null): void;
 };
 
 export const useGameState = create<GameState>((set) => ({
