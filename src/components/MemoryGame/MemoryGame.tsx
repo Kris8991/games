@@ -14,15 +14,17 @@ import { useNavigate } from 'react-router-dom';
 const TOTAL_NORMAL = 16;
 const TOTAL_HARD = 36;
 const MemoryGame: React.FC = () => {
-  const { displayTime, start, reset, stop } = useTimer();
-  const firstCardId = useRef<string>('');
+  const [bestTimes, setBestTimes] = useState<string[]>([]);
   const [cards, setCards] = useState(matrix);
-  const [flippedCards, setFlippeCards] = useState<string[]>([]);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [isModalActive, setIsModalActive] = useState(false);
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
   const [gameStarted, setGameStarted] = useState(false);
-  const [bestTimes, setBestTimes] = useState<string[]>([]);
+  const [flippedCards, setFlippedCards] = useState<string[]>([]);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const { displayTime, start, reset, stop } = useTimer();
+
+  const firstCardId = useRef<string>('');
 
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
@@ -32,13 +34,14 @@ const MemoryGame: React.FC = () => {
     if (saved) {
       setBestTimes(JSON.parse(saved));
     }
+    return setGameStarted(false);
   }, []);
 
   const handleDifficultyChange = (newDifficulty: Difficulty) => {
     reset();
     setDifficulty(newDifficulty);
     setCards(generateMatrix(newDifficulty));
-    setFlippeCards([]);
+    setFlippedCards([]);
     firstCardId.current = '';
     setGameStarted(true);
     setIsModalActive(false);
@@ -47,7 +50,7 @@ const MemoryGame: React.FC = () => {
   const handleNewGameStart = (): void => {
     reset();
     setCards(generateMatrix(difficulty));
-    setFlippeCards([]);
+    setFlippedCards([]);
     firstCardId.current = '';
     setIsModalActive(false);
   };
@@ -63,11 +66,11 @@ const MemoryGame: React.FC = () => {
 
     if (firstCardId.current === '') {
       firstCardId.current = cardId;
-      setFlippeCards((prevValue) => [...prevValue, firstCardId.current]);
+      setFlippedCards((prevValue) => [...prevValue, firstCardId.current]);
       return;
     }
 
-    setFlippeCards((prevValue) => {
+    setFlippedCards((prevValue) => {
       const updateCards = [...prevValue, cardId];
 
       if (totalCards === updateCards.length) {
@@ -93,7 +96,7 @@ const MemoryGame: React.FC = () => {
       const secondCardId = cardId;
 
       setTimeout(() => {
-        setFlippeCards((prevValue) =>
+        setFlippedCards((prevValue) =>
           prevValue.filter(
             (id) => id !== firstCardIdRef && id !== secondCardId,
           ),
