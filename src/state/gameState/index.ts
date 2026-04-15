@@ -1,1 +1,1 @@
-export { useGameState } from './gameState';
+export { useGameState } from './sudokuState';
