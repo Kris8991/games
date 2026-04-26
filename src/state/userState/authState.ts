@@ -4,16 +4,24 @@ type User = {
   email: string;
   name: string;
 };
+type UserWithPassword = {
+  email: string;
+  name: string;
+  password: string;
+};
 type AuthState = {
   user: User | null;
-  getItem(key: string): User | null;
-  signUp(user: User | null, cb: () => void): void;
+  getUser(key: string): User | null;
+  signIn(email: string, password: string): User | null;
+  signUp(user: UserWithPassword | null, cb: () => void): void;
   setUser(user: User | null): void;
 };
 
 export const useAuthState = create<AuthState>((set) => {
   const storedUser = localStorage.getItem('user');
   const initialUser = storedUser ? (JSON.parse(storedUser) as User) : null;
+
+  //console.log(user);
   return {
     user: initialUser,
 
@@ -26,8 +34,8 @@ export const useAuthState = create<AuthState>((set) => {
       set({ user });
     },
 
-    getItem: (key) => {
-      const storedUser = localStorage.getItem(key);
+    getUser: () => {
+      const storedUser = localStorage.getItem('user');
 
       if (storedUser) {
         const user = JSON.parse(storedUser) as User;
@@ -36,10 +44,27 @@ export const useAuthState = create<AuthState>((set) => {
       }
       return null;
     },
-    //signIn: (email) => достает всех юзеров ищет по почте юзера, если нашел,то сравнивает пароли, если не совпадают то ошибка
-    signUp: (user: User, cb) => {
-      localStorage.setItem('user', JSON.stringify(user));
-      set({ user });
+
+    signIn: (email, password) => {
+      const existingUsers = localStorage.getItem('users');
+      const usersArray = existingUsers ? JSON.parse(existingUsers) : [];
+      const foundedUser = usersArray.find(
+        (user: UserWithPassword) => user.email === email,
+      );
+      if (foundedUser && foundedUser.password === password) {
+        const publicUser = { email: foundedUser.email, name: foundedUser.name };
+        localStorage.setItem('user', JSON.stringify(publicUser));
+        set({ user: publicUser });
+
+        return foundedUser;
+      }
+      return null;
+    },
+    signUp: (user: UserWithPassword, cb) => {
+      const existingUsers = localStorage.getItem('users');
+      const usersArray = existingUsers ? JSON.parse(existingUsers) : [];
+      usersArray.push(user);
+      localStorage.setItem('users', JSON.stringify(usersArray));
       cb();
     },
   };

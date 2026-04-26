@@ -1,12 +1,13 @@
 import React, { type ReactElement } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthState } from '../state/userState/authState';
+
 type RequierAuthProps = {
   children: ReactElement;
 };
 console.log('Requier');
 
-const RequierAuth: React.FC<RequierAuthProps> = ({ children }) => {
+const RequireAuth: React.FC<RequierAuthProps> = ({ children }) => {
   const location = useLocation();
   const { user } = useAuthState();
   //const auth = user?.name;
@@ -22,4 +23,4 @@ const RequierAuth: React.FC<RequierAuthProps> = ({ children }) => {
   return children;
 };
 
-export default RequierAuth;
+export default RequireAuth;

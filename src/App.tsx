@@ -4,9 +4,10 @@ import { Route, Routes } from 'react-router-dom';
 import MemoryGame from './components/MemoryGame';
 import Sudoku from './components/Sudoku';
 import Enter from './components/Enter/enter';
-import RequierAuth from './HOC/RequierAuth';
+import RequireAuth from './HOC/RequireAuth';
 import Sign_up from './components/Auth/sign_up';
 import Sign_in from './components/Auth/sign_in';
+import RedirectIfAuth from './HOC/RedirectIfAuth';
 const App: React.FC = () => {
   return (
     <>
@@ -14,29 +15,50 @@ const App: React.FC = () => {
         <Route
           path="/"
           element={
-            <RequierAuth>
+            <RequireAuth>
               <HomePage />
-            </RequierAuth>
+            </RequireAuth>
           }
         />
-        <Route path="/enter" element={<Enter />} />
-        <Route path="/sign_up" element={<Sign_up />} />
-        <Route path="/sign_in" element={<Sign_in />} />
+        <Route
+          path="/enter"
+          element={
+            <RedirectIfAuth>
+              <Enter />
+            </RedirectIfAuth>
+          }
+        />
+        <Route
+          path="/sign_up"
+          element={
+            <RedirectIfAuth>
+              <Sign_up />
+            </RedirectIfAuth>
+          }
+        />
+        <Route
+          path="/sign_in"
+          element={
+            <RedirectIfAuth>
+              <Sign_in />
+            </RedirectIfAuth>
+          }
+        />
 
         <Route
           path="/memory"
           element={
-            <RequierAuth>
+            <RequireAuth>
               <MemoryGame />
-            </RequierAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/sudoku"
           element={
-            <RequierAuth>
+            <RequireAuth>
               <Sudoku />
-            </RequierAuth>
+            </RequireAuth>
           }
         />
       </Routes>
