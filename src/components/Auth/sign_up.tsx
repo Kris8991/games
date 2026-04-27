@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthState } from '../../state/userState/authState';
 import styles from './Auth.module.scss';
 
-//type sign_upProps = {};
-
 const Sign_up: React.FC = () => {
   const [formData, setformData] = useState({
     username: '',

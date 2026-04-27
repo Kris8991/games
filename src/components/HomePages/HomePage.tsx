@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './HomePages.module.scss';
+import ExitButton from './ExitButton';
 
 const HomePage: React.FC = () => {
   return (
     <div className={styles.homePage}>
+      <ExitButton />
       <h1>Выберите игру</h1>
       <div className={styles.homeContent}>
         <div className={styles.links}>

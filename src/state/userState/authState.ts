@@ -11,17 +11,16 @@ type UserWithPassword = {
 };
 type AuthState = {
   user: User | null;
-  getUser(key: string): User | null;
+  getUser(): User | null;
+  signOut(): void;
   signIn(email: string, password: string): User | null;
-  signUp(user: UserWithPassword | null, cb: () => void): void;
+  signUp(user: UserWithPassword, cb: () => void): void;
   setUser(user: User | null): void;
 };
 
 export const useAuthState = create<AuthState>((set) => {
   const storedUser = localStorage.getItem('user');
   const initialUser = storedUser ? (JSON.parse(storedUser) as User) : null;
-
-  //console.log(user);
   return {
     user: initialUser,
 
@@ -44,6 +43,10 @@ export const useAuthState = create<AuthState>((set) => {
       }
       return null;
     },
+    signOut: () => {
+      localStorage.removeItem('user');
+      set({ user: null });
+    },
 
     signIn: (email, password) => {
       const existingUsers = localStorage.getItem('users');
@@ -56,7 +59,7 @@ export const useAuthState = create<AuthState>((set) => {
         localStorage.setItem('user', JSON.stringify(publicUser));
         set({ user: publicUser });
 
-        return foundedUser;
+        return publicUser;
       }
       return null;
     },
@@ -64,6 +67,7 @@ export const useAuthState = create<AuthState>((set) => {
       const existingUsers = localStorage.getItem('users');
       const usersArray = existingUsers ? JSON.parse(existingUsers) : [];
       usersArray.push(user);
+
       localStorage.setItem('users', JSON.stringify(usersArray));
       cb();
     },

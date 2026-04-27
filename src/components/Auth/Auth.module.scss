@@ -2,12 +2,11 @@
 .container {
   max-width: 100vw;
   width: 100%;
-  background: linear-gradient(135deg, $primary 0%, $secondary 100%);
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
 
   form {
     display: flex;
     flex-direction: column;
-    //min-height: 100vh;
     font-family:
       'Segoe UI',
       'Roboto',
@@ -25,6 +24,11 @@
       0 25px 45px rgba(0, 0, 0, 0.4),
       0 0 0 1px rgba(255, 255, 255, 0.05);
     transition: transform 0.2s ease;
+    @include respond-to(mobile) {
+      max-width: 200px;
+      width: 100%;
+      margin-bottom: 100px;
+    }
   }
 
   title {
@@ -64,34 +68,36 @@
     transition: all 0.2s ease;
     outline: none;
     box-sizing: border-box;
+    @include respond-to(mobile) {
+      padding: 10px 12px;
+    }
 
     &:focus {
       border-color: #6c5ce7;
       box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
       background: rgba(20, 20, 30, 1);
     }
-
-    &::placeholder {
-      color: #5a5a7a;
-      font-size: 14px;
-    }
   }
 
   button {
     width: 100%;
     padding: 14px;
-    font-size: 18px;
+    font-size: 1rem;
     font-weight: 600;
+    letter-spacing: 1px;
     background: linear-gradient(135deg, #6c5ce7 0%, #4a3ab5 100%);
     border: none;
     border-radius: 40px;
     color: white;
     cursor: pointer;
+    animation: none;
     transition: all 0.2s ease;
     margin-top: 16px;
-    letter-spacing: 1px;
     box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
-
+    @include respond-to(mobile) {
+      padding: 12px 15px;
+      font-size: 0.8rem;
+    }
     &:hover {
       transform: translateY(-2px);
       background: linear-gradient(135deg, #7d6ef5 0%, #5e4dcf 100%);
@@ -103,47 +109,14 @@
     }
   }
 
-  .error {
-    background: rgba(255, 69, 96, 0.12);
-    border: 1px solid rgba(255, 69, 96, 0.3);
-    border-radius: 14px;
-    padding: 12px;
-    margin-bottom: 20px;
-    color: #ff6b7c;
-    font-size: 14px;
-    text-align: center;
-  }
-
-  a {
-    text-align: center;
-    margin-top: 24px;
-    font-size: 14px;
-    color: #a0a0c0;
-    color: #8c7cf2;
-    text-decoration: none;
-    margin-left: 6px;
-    font-weight: 500;
-    transition: color 0.2s;
-
-    &:hover {
-      color: #b5a9ff;
-      text-decoration: underline;
-    }
-  }
-
-  // Адаптация под мобильные устройства
-  @media (max-width: 480px) {
-    .form {
-      padding: 28px 20px;
-    }
-
-    .title {
-      font-size: 24px;
-      margin-bottom: 24px;
-    }
-
-    .input {
-      padding: 12px 14px;
-    }
-  }
+  // .error {
+  //   background: rgba(255, 69, 96, 0.12);
+  //   border: 1px solid rgba(255, 69, 96, 0.3);
+  //   border-radius: 14px;
+  //   padding: 12px;
+  //   margin-bottom: 20px;
+  //   color: #ff6b7c;
+  //   font-size: 14px;
+  //   text-align: center;
+  // }
 }

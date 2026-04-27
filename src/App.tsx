@@ -3,11 +3,9 @@ import HomePage from './components/HomePages';
 import { Route, Routes } from 'react-router-dom';
 import MemoryGame from './components/MemoryGame';
 import Sudoku from './components/Sudoku';
-import Enter from './components/Enter/enter';
-import RequireAuth from './HOC/RequireAuth';
-import Sign_up from './components/Auth/sign_up';
-import Sign_in from './components/Auth/sign_in';
-import RedirectIfAuth from './HOC/RedirectIfAuth';
+import Enter from './components/Enter';
+import { RedirectIfAuth, RequireAuth } from './HOC/index';
+import { Sign_up, Sign_in } from './components/Auth/index';
 const App: React.FC = () => {
   return (
     <>
@@ -44,7 +42,6 @@ const App: React.FC = () => {
             </RedirectIfAuth>
           }
         />
-
         <Route
           path="/memory"
           element={
