@@ -1,15 +1,15 @@
 import { create } from 'zustand';
 
-type User = {
+export type User = {
   email: string;
   name: string;
 };
-type UserWithPassword = {
+export type UserWithPassword = {
   email: string;
   name: string;
   password: string;
 };
-type AuthState = {
+export type AuthState = {
   user: User | null;
   getUser(): User | null;
   signOut(): void;

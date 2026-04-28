@@ -1,4 +1,4 @@
-@use '../MemoryGame/styles/index' as *;
+@use './memoryGame/styles/index.scss' as *;
 .container {
   max-width: 100vw;
   width: 100%;
@@ -76,36 +76,6 @@
       border-color: #6c5ce7;
       box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
       background: rgba(20, 20, 30, 1);
-    }
-  }
-
-  button {
-    width: 100%;
-    padding: 14px;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    background: linear-gradient(135deg, #6c5ce7 0%, #4a3ab5 100%);
-    border: none;
-    border-radius: 40px;
-    color: white;
-    cursor: pointer;
-    animation: none;
-    transition: all 0.2s ease;
-    margin-top: 16px;
-    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
-    @include respond-to(mobile) {
-      padding: 12px 15px;
-      font-size: 0.8rem;
-    }
-    &:hover {
-      transform: translateY(-2px);
-      background: linear-gradient(135deg, #7d6ef5 0%, #5e4dcf 100%);
-      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
-    }
-
-    &:active {
-      transform: translateY(1px);
     }
   }
 

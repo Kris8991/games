@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './HomePages.module.scss';
-import ExitButton from './ExitButton';
+import ExitButton from '../../components/exitButton/ExitButton';
 
 const HomePage: React.FC = () => {
   return (

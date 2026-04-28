@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './Enter.module.scss';
+import Button from '../../ui/button/button';
 
 const Enter: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -9,21 +11,13 @@ const Enter: React.FC = () => {
         <p className={styles.subtitle}>
           Войдите или создайте аккаунт, чтобы продолжить
         </p>
-
         <div className={styles.buttonGroup}>
-          <Link
-            to="/sign_in"
-            className={`${styles.button} ${styles.buttonPrimary}`}
-          >
-            Войти
-          </Link>
-
-          <Link
-            to="/sign_up"
-            className={`${styles.button} ${styles.buttonSecondary}`}
-          >
-            Зарегистрироваться
-          </Link>
+          <Button children={'Войти'} onClick={() => navigate('/sign_in')} />
+          <Button
+            children={'Зарегистрироваться'}
+            variant="secondary"
+            onClick={() => navigate('/sign_up')}
+          />
         </div>
         <div className={styles.footer}>Играйте в удовольствие 🎮</div>
       </div>

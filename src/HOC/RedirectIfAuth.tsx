@@ -1,6 +1,6 @@
 import React, { type ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuthState } from '../state/userState/authState';
+import { useAuthState } from '../stores/user';
 
 type RedirectIfAuthProps = { children: ReactElement };
 

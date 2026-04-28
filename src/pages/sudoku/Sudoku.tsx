@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Sudoku.module.scss';
-import Cell from './Cell';
-import { generateSudoku, createGameBoard } from './Sudoku.utils.ts';
-import SudokuModal from './SudokuModal/SudokuModal';
-import SudokuInfo from './SudokuInfo';
-import MobileControls from './MobileControls';
+import Cell from './Cell/index.ts';
+import { generateSudoku, createGameBoard } from './Sudoku.utils.ts/index.ts';
+import SudokuModal from './SudokuModal/SudokuModal.tsx';
+import SudokuInfo from './SudokuInfo/index.ts';
+import MobileControls from './MobileControls/index.ts';
 import { TfiArrowCircleLeft } from 'react-icons/tfi';
-import { useGameState } from '../../state/gameState';
+import { useGameState } from '../../stores/game/index.ts';
 
 const Sudoku: React.FC = () => {
   const navigate = useNavigate();

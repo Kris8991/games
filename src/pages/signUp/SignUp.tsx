@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import styles from './Auth.module.scss';
-import { useAuthState } from '../../state/userState/authState';
 import { useNavigate } from 'react-router-dom';
+import { useAuthState } from '../../stores/user';
+import styles from '../Auth.module.scss';
+import Button from '../../ui/button/button';
 
-//type sign_inProps = {};
-
-const Sign_in: React.FC = () => {
+const SignUp: React.FC = () => {
   const [formData, setformData] = useState({
+    username: '',
     email: '',
     password: '',
   });
+  const { signUp } = useAuthState();
   const navigate = useNavigate();
-
-  const { signIn, setUser } = useAuthState();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -21,25 +20,30 @@ const Sign_in: React.FC = () => {
       [name]: value,
     }));
   };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { email } = formData;
-    const { password } = formData;
+    const form = event.currentTarget;
+    const username = (form.elements.namedItem('username') as HTMLInputElement)
+      .value;
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+    const password = (form.elements.namedItem('password') as HTMLInputElement)
+      .value;
 
-    const user = signIn(email, password);
-    if (user) {
-      setUser(user);
-      navigate('/');
-      console.log('enter');
-    } else {
-      console.log('error');
-    }
-    //const storedUsers = signIn();
+    signUp({ email: email, name: username, password: password }, () => {});
+    navigate('/sign_in');
   };
   return (
     <div className={styles.container}>
       <form onSubmit={handleSubmit}>
+        <label>
+          Name:{' '}
+          <input
+            name="username"
+            type="text"
+            value={formData.username}
+            onChange={handleChange}
+          />
+        </label>
         <label>
           Email:{' '}
           <input
@@ -58,10 +62,10 @@ const Sign_in: React.FC = () => {
             onChange={handleChange}
           />
         </label>
-        <button type="submit">Войти</button>
+        <Button children={'Зарегистрироваться'} type="submit" />
       </form>
     </div>
   );
 };
 
-export default Sign_in;
+export default SignUp;
