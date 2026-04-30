@@ -2,9 +2,7 @@
 @use 'sass:color';
 .container {
   @include respond-to(mobile) {
-    //margin: 5px 10px;
-    width: 70%;
-    margin: 0 auto;
+    width: 80%;
   }
 }
 h1 {
@@ -15,7 +13,7 @@ h1 {
 
 .sudokuGrid {
   display: grid;
-  grid-template-columns: repeat(9, minmax(40px, 70px));
+  grid-template-columns: repeat(9, minmax(30px, 70px));
   max-width: 900px;
   border: 3px solid #333;
   background-color: #333;
@@ -93,7 +91,7 @@ h1 {
 }
 
 .mobilePanel {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 0.5rem;
   max-width: 500px;

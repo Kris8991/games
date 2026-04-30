@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Sudoku.module.scss';
 import Cell from '../../components/sudoku/Cell/index.ts';
-import { generateSudoku, createGameBoard } from './Sudoku.utils.ts/index.ts';
+import { generateSudoku, createGameBoard } from '../../utils/sudokuUtils.ts';
 import SudokuModal from '../../components/sudoku/SudokuModal/SudokuModal.tsx';
 import SudokuInfo from '../../components/sudoku/SudokuInfo/index.ts';
 import MobileControls from '../../components/sudoku/MobileControls/index.ts';

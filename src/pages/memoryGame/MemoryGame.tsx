@@ -1,6 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
-import type { Difficulty } from './MemoryGame.utils';
-import { matrix, generateMatrix } from './MemoryGame.utils';
+import type { Difficulty } from '../../utils/memoryGameUtils/MemoryGame.utils';
+import {
+  matrix,
+  generateMatrix,
+} from '../../utils/memoryGameUtils/MemoryGame.utils';
 import GameBoard from '../../components/memoryGame/GameBoard';
 import VictoryModal from '../../components/memoryGame/VictoryModal';
 import WelcomeMessage from './WelcomeMessage';

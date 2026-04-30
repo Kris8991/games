@@ -55,10 +55,15 @@ button {
 .medium {
   width: 30%;
   @include respond-to(tablet) {
+    width: 50%;
     padding: 10px 20px;
     font-size: 0.9rem;
   }
 }
 .large {
   width: 100%;
+  @include respond-to(tablet) {
+    padding: 12px 25px;
+    font-size: 0.8rem;
+  }
 }
