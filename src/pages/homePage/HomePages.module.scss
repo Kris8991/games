@@ -1,4 +1,4 @@
-@use '../MemoryGame/styles/index' as *;
+@use '../../styles/index.scss' as *;
 
 .homePage {
   min-height: 100vh;
@@ -9,8 +9,19 @@
   flex-direction: column;
   animation: slideIn 0.5s ease;
   margin: 0 auto;
+  @include respond-to(tablet) {
+    margin-top: -80px;
+  }
   @include respond-to(mobile) {
     gap: 0px;
+  }
+  button {
+    width: 10%;
+    margin-left: auto;
+    color: $text-dark;
+  }
+  h1 {
+    margin-bottom: 10px;
   }
 }
 
@@ -29,7 +40,7 @@
     @include flex-center;
   }
   .imgContainer {
-    margin-top: 50px;
+    margin-top: 20px;
     aspect-ratio: 1;
     width: 100%;
     height: 100%;

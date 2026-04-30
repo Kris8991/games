@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import styles from '../Sudoku.module.scss';
+import styles from '../../../pages/sudoku/Sudoku.module.scss';
 import { clsx } from 'clsx';
 
 type CellProps = {

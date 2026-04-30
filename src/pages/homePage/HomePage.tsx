@@ -1,12 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './HomePages.module.scss';
-import ExitButton from '../../components/exitButton/ExitButton';
+import { useAuthState } from '../../stores/user';
+import Button from '../../ui/button';
 
 const HomePage: React.FC = () => {
+  const { signOut } = useAuthState();
+  const handleClick = () => {
+    signOut();
+  };
   return (
     <div className={styles.homePage}>
-      <ExitButton />
+      <Button
+        children={' Выйти'}
+        type="button"
+        variant="secondary"
+        onClick={handleClick}
+      />
       <h1>Выберите игру</h1>
       <div className={styles.homeContent}>
         <div className={styles.links}>

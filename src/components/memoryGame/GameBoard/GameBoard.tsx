@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '../Card/Card';
 import styles from './GameBoard.module.scss';
-import type { CardType } from '../MemoryGame.utils';
+import type { CardType } from '../../../pages/memoryGame/MemoryGame.utils';
 
 type GameBoardProps = {
   cards: CardType[][];

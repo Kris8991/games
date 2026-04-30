@@ -1,5 +1,12 @@
-@use '../MemoryGame/styles/index' as *;
+@use '../../styles/index.scss' as *;
 @use 'sass:color';
+.container {
+  @include respond-to(mobile) {
+    //margin: 5px 10px;
+    width: 70%;
+    margin: 0 auto;
+  }
+}
 h1 {
   color: white;
   margin-bottom: 0px;
@@ -86,17 +93,20 @@ h1 {
 }
 
 .mobilePanel {
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 0.5rem;
   max-width: 500px;
-  width: 100%;
   margin-top: 20px;
   padding: 16px;
   background-color: white;
   border-radius: 12px;
   @media (hover: none) and (pointer: coarse) {
     display: flex;
+  }
+
+  @include respond-to(mobile) {
+    padding: 5px;
   }
 
   & button {
@@ -108,7 +118,7 @@ h1 {
   }
   .numberPad {
     display: grid;
-    grid-template-columns: repeat(9, minmax(30px, 70px));
+    grid-template-columns: repeat(9, minmax(10px, 70px));
     max-width: 900px;
     & button {
       background: none;
@@ -122,7 +132,7 @@ h1 {
     display: flex;
     justify-content: space-around;
     & button {
-      padding: 0.25rem;
+      padding: 0.25rem 0.1rem;
     }
   }
 }

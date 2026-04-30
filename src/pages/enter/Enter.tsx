@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './Enter.module.scss';
-import Button from '../../ui/button/button';
+import Button from '../../ui/button';
 
 const Enter: React.FC = () => {
   const navigate = useNavigate();

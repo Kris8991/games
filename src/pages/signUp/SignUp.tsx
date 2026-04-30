@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthState } from '../../stores/user';
-import styles from '../Auth.module.scss';
-import Button from '../../ui/button/button';
+import styles from '../../styles/global.module.scss';
+import Button from '../../ui/button';
+import TextField from '../../ui/textField/TextField';
 
 const SignUp: React.FC = () => {
   const [formData, setformData] = useState({
@@ -33,35 +34,30 @@ const SignUp: React.FC = () => {
     navigate('/sign_in');
   };
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${styles.containerAuth}`}>
       <form onSubmit={handleSubmit}>
-        <label>
-          Name:{' '}
-          <input
-            name="username"
-            type="text"
-            value={formData.username}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Email:{' '}
-          <input
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Password:{' '}
-          <input
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </label>
+        <TextField
+          label="Name: "
+          name="username"
+          type="text"
+          value={formData.username}
+          onChange={handleChange}
+        />
+
+        <TextField
+          label="Email: "
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <TextField
+          label="Password: "
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+        />
         <Button children={'Зарегистрироваться'} type="submit" />
       </form>
     </div>

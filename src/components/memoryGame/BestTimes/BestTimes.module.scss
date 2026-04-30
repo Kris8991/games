@@ -1,9 +1,9 @@
-@use '../styles/index' as *;
+@use '../../../styles/index.scss' as *;
 
 .recordsContainer {
   position: absolute;
-  right: -40px;
-  top: 250px;
+  right: 45px;
+  top: 50px;
   @include flex-center;
   flex-direction: column;
   gap: 0.5rem;

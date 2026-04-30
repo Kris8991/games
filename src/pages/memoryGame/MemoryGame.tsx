@@ -1,15 +1,15 @@
 import React, { useRef, useState, useEffect } from 'react';
 import type { Difficulty } from './MemoryGame.utils';
 import { matrix, generateMatrix } from './MemoryGame.utils';
-import DifficultyButtons from './DifficultyButtons';
-import GameBoard from './GameBoard';
-import VictoryModal from './VictoryModal';
+import GameBoard from '../../components/memoryGame/GameBoard';
+import VictoryModal from '../../components/memoryGame/VictoryModal';
 import WelcomeMessage from './WelcomeMessage';
-import Timer from './Timer';
-import { useTimer } from './Timer';
-import styles from '../MemoryGame/GameBoard/GameBoard.module.scss';
-import BestTimes from './BestTimes';
+import Timer from '../../components/memoryGame/Timer';
+import { useTimer } from '../../components/memoryGame/Timer';
+import styles from '../../components/memoryGame/GameBoard/GameBoard.module.scss';
+import BestTimes from '../../components/memoryGame/BestTimes';
 import { useNavigate } from 'react-router-dom';
+import Button from '../../ui/button';
 
 const TOTAL_NORMAL = 16;
 const TOTAL_HARD = 36;
@@ -122,12 +122,22 @@ const MemoryGame: React.FC = () => {
     localStorage.setItem('bestTimes', JSON.stringify(top3));
   };
   return (
-    <div className={styles.container}>
-      <h1>Memory Game</h1>
+    <div className={`${styles.memoryContainer} ${styles.container} `}>
       {!gameStarted ? (
         <>
           <WelcomeMessage />
-          <DifficultyButtons onDifficultyChange={handleDifficultyChange} />
+          <div className={styles.difficultyButton}>
+            <Button
+              children={'Normal'}
+              onClick={() => handleDifficultyChange('normal')}
+              size="medium"
+            />
+            <Button
+              children={'Hard'}
+              onClick={() => handleDifficultyChange('hard')}
+              size="medium"
+            />
+          </div>
         </>
       ) : (
         <>
@@ -146,11 +156,12 @@ const MemoryGame: React.FC = () => {
         onNewGame={handleNewGameStart}
         displayTime={displayTime}
       />
-      <div className={styles.recordsContainer}></div>
-
-      <button className={styles.goBack} onClick={goBack}>
-        ◀-- К выбору игры
-      </button>
+      <Button
+        children={'◀-- К выбору игры'}
+        onClick={goBack}
+        size="medium"
+        variant="secondary"
+      />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../Sudoku.module.scss';
+import styles from '../../../pages/sudoku/Sudoku.module.scss';
 
 type SudokuInfoProps = {
   errorCount: number;

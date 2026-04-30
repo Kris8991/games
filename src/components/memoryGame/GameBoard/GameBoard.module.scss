@@ -1,4 +1,12 @@
-@use '../styles/index' as *;
+@use '../../../styles/index.scss' as *;
+.memoryContainer {
+  max-width: 1200px;
+  .difficultyButton {
+    display: flex;
+    justify-content: space-around;
+    width: 70%;
+  }
+}
 
 .gridNormalContainer,
 .gridHardContainer {

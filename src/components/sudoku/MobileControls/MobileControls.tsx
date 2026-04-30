@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import styles from '../Sudoku.module.scss';
+import styles from '../../../pages/sudoku/Sudoku.module.scss';
 import { TfiEraser, TfiHelp } from 'react-icons/tfi';
 import {} from 'react-icons/tfi';
 

@@ -1,13 +1,11 @@
-@use '../../pages/memoryGame/styles/index.scss' as *;
+@use '../../styles/index.scss' as *;
 button {
-  width: 100%;
-  padding: 14px;
+  padding: 5px;
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 1px;
   background: linear-gradient(135deg, #6c5ce7 0%, #4a3ab5 100%);
   border: none;
-  border-radius: 40px;
   color: white;
   cursor: pointer;
   animation: none;
@@ -28,7 +26,7 @@ button {
     transform: translateY(1px);
   }
 }
-.buttonPrimary {
+.primary {
   background: linear-gradient(135deg, #6c5ce7 0%, #4a3ab5 100%);
   color: white;
   box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
@@ -39,13 +37,28 @@ button {
   }
 }
 
-.buttonSecondary {
+.secondary {
   background: rgba(108, 92, 231, 0.15);
-  color: #b5a9ff;
+  color: white;
+
   border: 1px solid rgba(108, 92, 231, 0.4);
 
   &:hover {
     background: rgba(108, 92, 231, 0.25);
     border-color: rgba(108, 92, 231, 0.6);
   }
+}
+.small {
+  width: 20%;
+  padding: 0;
+}
+.medium {
+  width: 30%;
+  @include respond-to(tablet) {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+.large {
+  width: 100%;
 }

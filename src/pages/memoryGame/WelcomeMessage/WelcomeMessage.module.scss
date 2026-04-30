@@ -1,19 +1,19 @@
-@use '../styles/index' as *;
+@use '../../../styles//index.scss' as *;
 
 .welcomeMessage {
   text-align: center;
   padding: 3rem;
   background: linear-gradient(135deg, $primary 0%, $secondary 100%);
-  border-radius: 16px;
+  border-radius: 40px;
   color: $white;
   margin: 2rem auto;
   width: 60%;
-
+  aspect-ratio: 2;
   box-shadow: $shadow-lg;
 
   h2 {
     font-size: clamp(1.5rem, 4vw, 2.5rem);
-    margin-bottom: 1rem;
+    margin-bottom: 4rem;
   }
 
   p {
