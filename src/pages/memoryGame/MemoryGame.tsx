@@ -12,7 +12,7 @@ import { useTimer } from '../../components/memoryGame/Timer';
 import styles from '../../components/memoryGame/GameBoard/GameBoard.module.scss';
 import BestTimes from '../../components/memoryGame/BestTimes';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../ui/button';
+import Button from '../../ui/Button';
 
 const TOTAL_NORMAL = 16;
 const TOTAL_HARD = 36;
@@ -131,15 +131,17 @@ const MemoryGame: React.FC = () => {
           <WelcomeMessage />
           <div className={styles.difficultyButton}>
             <Button
-              children={'Normal'}
               onClick={() => handleDifficultyChange('normal')}
               size="medium"
-            />
+            >
+              Normal
+            </Button>
             <Button
-              children={'Hard'}
               onClick={() => handleDifficultyChange('hard')}
               size="medium"
-            />
+            >
+              Hard
+            </Button>
           </div>
         </>
       ) : (
@@ -159,12 +161,9 @@ const MemoryGame: React.FC = () => {
         onNewGame={handleNewGameStart}
         displayTime={displayTime}
       />
-      <Button
-        children={'◀-- К выбору игры'}
-        onClick={goBack}
-        size="medium"
-        variant="secondary"
-      />
+      <Button onClick={goBack} size="medium" variant="secondary">
+        ◀-- К выбору игры
+      </Button>
     </div>
   );
 };

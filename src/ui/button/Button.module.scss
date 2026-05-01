@@ -1,20 +1,26 @@
 @use '../../styles/index.scss' as *;
-button {
-  padding: 5px;
+.component {
+  @include flex-center;
+  gap: 1rem;
+  padding: 15px 20px;
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 1px;
   background: linear-gradient(135deg, #6c5ce7 0%, #4a3ab5 100%);
+  border-radius: 40px;
+  box-sizing: border-box;
   border: none;
   color: white;
   cursor: pointer;
   animation: none;
   transition: all 0.2s ease;
-  margin-top: 16px;
+  margin: 16px 0;
   box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
   @include respond-to(mobile) {
+    width: 50%;
     padding: 12px 15px;
     font-size: 0.8rem;
+    border-radius: 20px;
   }
   &:hover {
     transform: translateY(-2px);
@@ -40,7 +46,6 @@ button {
 .secondary {
   background: rgba(108, 92, 231, 0.15);
   color: white;
-
   border: 1px solid rgba(108, 92, 231, 0.4);
 
   &:hover {
@@ -54,16 +59,7 @@ button {
 }
 .medium {
   width: 30%;
-  @include respond-to(tablet) {
-    width: 50%;
-    padding: 10px 20px;
-    font-size: 0.9rem;
-  }
 }
 .large {
   width: 100%;
-  @include respond-to(tablet) {
-    padding: 12px 25px;
-    font-size: 0.8rem;
-  }
 }

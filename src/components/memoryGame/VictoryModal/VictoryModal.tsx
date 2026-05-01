@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from './VictoryModal.module.scss';
+import Button from '../../../ui/Button';
 
 type VictoryModalProps = {
   isActive: boolean;
@@ -19,7 +20,7 @@ const VictoryModal: React.FC<VictoryModalProps> = ({
       <div className={styles.modalContent}>
         <h2>Победа!</h2>
         <p>Вы нашли все пары за {displayTime} !</p>
-        <button onClick={onNewGame}>Новая игра</button>
+        <Button onClick={onNewGame}>Новая игра</Button>
       </div>
     </div>,
     document.body,

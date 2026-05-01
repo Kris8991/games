@@ -1,11 +1,11 @@
 import React, { type ReactElement } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { SignIn } from '../signIn';
-import MemoryGame from '../memoryGame';
-import Sudoku from '../sudoku';
-import { SignUp } from '../signUp';
-import Enter from '../enter';
-import HomePage from '../homePage';
+import { SignIn } from '../SignIn';
+import MemoryGame from '../MemoryGame';
+import Sudoku from '../Sudoku';
+import { SignUp } from '../SignUp';
+import Enter from '../Enter';
+import HomePage from '../HomePage';
 import { RedirectIfAuth, RequireAuth } from '../../hoc';
 
 const protectRoute = (node: ReactElement) => {

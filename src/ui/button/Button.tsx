@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Button.module.scss';
+import clsx from 'clsx';
 
 type ButtonProps = {
   children?: React.ReactNode;
@@ -18,9 +19,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={`${styles[size]}
-        ${styles[variant]}
-        `}
+      className={clsx(styles.component, styles[size], styles[variant])}
       onClick={onClick}
       type={type}
     >

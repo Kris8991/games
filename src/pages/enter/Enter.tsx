@@ -1,23 +1,22 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './Enter.module.scss';
-import Button from '../../ui/button';
+import Button from '../../ui/Button';
+import clsx from 'clsx';
 
 const Enter: React.FC = () => {
   const navigate = useNavigate();
   return (
-    <div className={styles.container}>
+    <div className={clsx(styles.containerAuth, styles.container)}>
       <div className={styles.card}>
         <h1 className={styles.title}>Добро пожаловать!</h1>
         <p className={styles.subtitle}>
           Войдите или создайте аккаунт, чтобы продолжить
         </p>
         <div className={styles.buttonGroup}>
-          <Button children={'Войти'} onClick={() => navigate('/sign_in')} />
-          <Button
-            children={'Зарегистрироваться'}
-            variant="secondary"
-            onClick={() => navigate('/sign_up')}
-          />
+          <Button onClick={() => navigate('/sign_in')}>Войти </Button>
+          <Button variant="secondary" onClick={() => navigate('/sign_up')}>
+            Зарегистрироваться
+          </Button>
         </div>
         <div className={styles.footer}>Играйте в удовольствие 🎮</div>
       </div>

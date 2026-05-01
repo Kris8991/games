@@ -8,7 +8,7 @@ import SudokuInfo from '../../components/sudoku/SudokuInfo/index.ts';
 import MobileControls from '../../components/sudoku/MobileControls/index.ts';
 import { TfiArrowCircleLeft } from 'react-icons/tfi';
 import { useGameState } from '../../stores/game/index.ts';
-import Button from '../../ui/button/Button.tsx';
+import Button from '../../ui/Button/Button.tsx';
 
 const Sudoku: React.FC = () => {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './HomePages.module.scss';
 import { useAuthState } from '../../stores/user';
-import Button from '../../ui/button';
+import Button from '../../ui/Button';
 
 const HomePage: React.FC = () => {
   const { signOut } = useAuthState();
@@ -11,12 +11,9 @@ const HomePage: React.FC = () => {
   };
   return (
     <div className={styles.homePage}>
-      <Button
-        children={' Выйти'}
-        type="button"
-        variant="secondary"
-        onClick={handleClick}
-      />
+      <Button type="button" variant="secondary" onClick={handleClick}>
+        Выйти{' '}
+      </Button>
       <h1>Выберите игру</h1>
       <div className={styles.homeContent}>
         <div className={styles.links}>

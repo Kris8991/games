@@ -16,7 +16,7 @@ const TextField: React.FC<TextFieldProps> = ({
   onChange,
 }) => {
   return (
-    <label htmlFor={name} className={styles.label}>
+    <label htmlFor={name} className={styles.component}>
       {label}
       <input
         name={name}

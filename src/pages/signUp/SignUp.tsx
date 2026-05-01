@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthState } from '../../stores/user';
 import styles from '../../styles/global.module.scss';
-import Button from '../../ui/button';
-import TextField from '../../ui/textField/TextField';
+import Button from '../../ui/Button';
+import TextField from '../../ui/TextField/TextField';
 
 const SignUp: React.FC = () => {
   const [formData, setformData] = useState({
@@ -35,9 +35,9 @@ const SignUp: React.FC = () => {
   };
   return (
     <div className={`${styles.container} ${styles.containerAuth}`}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.card}>
         <TextField
-          label="Name: "
+          label="Имя: "
           name="username"
           type="text"
           value={formData.username}
@@ -52,13 +52,13 @@ const SignUp: React.FC = () => {
           onChange={handleChange}
         />
         <TextField
-          label="Password: "
+          label="Пароль: "
           name="password"
           type="password"
           value={formData.password}
           onChange={handleChange}
         />
-        <Button children={'Зарегистрироваться'} type="submit" />
+        <Button type="submit">Зарегистрироваться</Button>
       </form>
     </div>
   );

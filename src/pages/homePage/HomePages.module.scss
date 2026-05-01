@@ -10,18 +10,24 @@
   animation: slideIn 0.5s ease;
   margin: 0 auto;
   @include respond-to(tablet) {
-    margin-top: -80px;
+    margin-top: 0px;
   }
   @include respond-to(mobile) {
     gap: 0px;
   }
   button {
-    width: 10%;
+    width: 15%;
     margin-left: auto;
     color: $text-dark;
+    @include respond-to(mobile) {
+      width: 30%;
+    }
   }
   h1 {
     margin-bottom: 10px;
+    @include respond-to(mobile) {
+      margin: 0;
+    }
   }
 }
 
@@ -64,7 +70,4 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  button {
-    animation: none;
-  }
 }

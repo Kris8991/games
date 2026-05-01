@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './SudokuModal.module.scss';
+import Button from '../../../ui/Button';
 
 type SudokuModalProps = {
   isActive: boolean;
@@ -18,7 +19,7 @@ const SudokuModal: React.FC<SudokuModalProps> = ({
     <div className={styles.overlay}>
       <div className={styles.modal}>
         <p>{message}</p>
-        <button onClick={onNewGame}>Новая игра</button>
+        <Button onClick={onNewGame}>Новая игра</Button>
       </div>
     </div>
   );

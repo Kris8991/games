@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styles from '../../styles/global.module.scss';
 import { useAuthState } from '../../stores/user/index';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../ui/button';
-import TextField from '../../ui/textField/TextField';
+import Button from '../../ui/Button';
+import TextField from '../../ui/TextField/TextField';
 
 const SignIn: React.FC = () => {
   const [formData, setformData] = useState({
@@ -37,7 +37,7 @@ const SignIn: React.FC = () => {
   };
   return (
     <div className={`${styles.container} ${styles.containerAuth}`}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.card}>
         <TextField
           label="Email: "
           name="email"
@@ -46,13 +46,13 @@ const SignIn: React.FC = () => {
           onChange={handleChange}
         />
         <TextField
-          label="Password: "
+          label="Пароль: "
           name="password"
           type="password"
           value={formData.password}
           onChange={handleChange}
         />
-        <Button children={'Войти'} type="submit" />
+        <Button type="submit">Войти</Button>
       </form>
     </div>
   );
