@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
-import styles from '../../../pages/sudoku/Sudoku.module.scss';
-import { clsx } from 'clsx';
+import styles from './Cell.module.scss';
+import clsx from 'clsx';
 
 type CellProps = {
   accentValue: number | null;

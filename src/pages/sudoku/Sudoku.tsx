@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Sudoku.module.scss';
-import Cell from '../../components/sudoku/Cell/index.ts';
+import Cell from '../../components/sudoku/Cell';
 import { generateSudoku, createGameBoard } from '../../utils/sudokuUtils.ts';
-import SudokuModal from '../../components/sudoku/SudokuModal/SudokuModal.tsx';
-import SudokuInfo from '../../components/sudoku/SudokuInfo/index.ts';
-import MobileControls from '../../components/sudoku/MobileControls/index.ts';
+import SudokuModal from '../../components/sudoku/SudokuModal';
+import SudokuInfo from '../../components/sudoku/SudokuInfo';
+import MobileControls from '../../components/sudoku/MobileControls';
 import { TfiArrowCircleLeft } from 'react-icons/tfi';
-import { useGameState } from '../../stores/game/index.ts';
-import Button from '../../ui/Button/Button.tsx';
+import { useGameState } from '../../stores/game';
+import Button from '../../ui/Button';
 
 const Sudoku: React.FC = () => {
   const navigate = useNavigate();
@@ -237,7 +237,7 @@ const Sudoku: React.FC = () => {
   }, [handleValueChange, initialCells]);
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       <SudokuInfo errorCount={errorsCount} helpsCount={helpsCount} />
       <div className={styles.sudokuGrid}>
         {gameBoard.map((row, rowIndex) =>

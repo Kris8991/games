@@ -7,9 +7,8 @@ import {
 import GameBoard from '../../components/memoryGame/GameBoard';
 import VictoryModal from '../../components/memoryGame/VictoryModal';
 import WelcomeMessage from './WelcomeMessage';
-import Timer from '../../components/memoryGame/Timer';
-import { useTimer } from '../../components/memoryGame/Timer';
-import styles from '../../components/memoryGame/GameBoard/GameBoard.module.scss';
+import Timer, { useTimer } from '../../components/memoryGame/Timer';
+import styles from './MemoryGame.module.scss';
 import BestTimes from '../../components/memoryGame/BestTimes';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../ui/Button';
@@ -125,7 +124,7 @@ const MemoryGame: React.FC = () => {
     localStorage.setItem('bestTimes', JSON.stringify(top3));
   };
   return (
-    <div className={`${styles.memoryContainer} ${styles.container} `}>
+    <div className={`${styles.memoryContainer} container`}>
       {!gameStarted ? (
         <>
           <WelcomeMessage />

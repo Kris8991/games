@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import styles from '../../styles/global.module.scss';
-import { useAuthState } from '../../stores/user/index';
+import { useAuthState } from '../../stores/user';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../ui/Button';
-import TextField from '../../ui/TextField/TextField';
+import TextField from '../../ui/TextField';
 
 const SignIn: React.FC = () => {
   const [formData, setformData] = useState({
@@ -36,8 +35,8 @@ const SignIn: React.FC = () => {
     }
   };
   return (
-    <div className={`${styles.container} ${styles.containerAuth}`}>
-      <form onSubmit={handleSubmit} className={styles.card}>
+    <div className="container containerAuth">
+      <form onSubmit={handleSubmit} className="card">
         <TextField
           label="Email: "
           name="email"

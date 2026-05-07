@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Card.module.scss';
-import type { CardType } from '../MemoryGame.utils';
+import type { CardType } from '../../../utils/memoryGameUtils/MemoryGame.utils';
 
 type CardProps = {
   card: CardType;
