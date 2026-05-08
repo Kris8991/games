@@ -1,0 +1,170 @@
+import React, { useRef, useState, useEffect } from 'react';
+import type { Difficulty } from '../../utils/memoryGameUtils/MemoryGame.utils';
+import {
+  matrix,
+  generateMatrix,
+} from '../../utils/memoryGameUtils/MemoryGame.utils';
+import GameBoard from '../../components/memoryGame/GameBoard';
+import VictoryModal from '../../components/memoryGame/VictoryModal';
+import WelcomeMessage from './WelcomeMessage';
+import Timer, { useTimer } from '../../components/memoryGame/Timer';
+import styles from './MemoryGame.module.scss';
+import BestTimes from '../../components/memoryGame/BestTimes';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../ui/Button';
+
+const TOTAL_NORMAL = 16;
+const TOTAL_HARD = 36;
+const MemoryGame: React.FC = () => {
+  const [bestTimes, setBestTimes] = useState<string[]>([]);
+  const [cards, setCards] = useState(matrix);
+  const [difficulty, setDifficulty] = useState<Difficulty>('normal');
+  const [gameStarted, setGameStarted] = useState(false);
+  const [flippedCards, setFlippedCards] = useState<string[]>([]);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const { displayTime, start, reset, stop } = useTimer();
+
+  const firstCardId = useRef<string>('');
+
+  const navigate = useNavigate();
+  const goBack = () => navigate(-1);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('bestTimes');
+    if (saved) {
+      setBestTimes(JSON.parse(saved));
+    }
+    return setGameStarted(false);
+  }, []);
+
+  const handleDifficultyChange = (newDifficulty: Difficulty) => {
+    reset();
+    setDifficulty(newDifficulty);
+    setCards(generateMatrix(newDifficulty));
+    setFlippedCards([]);
+    firstCardId.current = '';
+    setGameStarted(true);
+    setIsModalActive(false);
+  };
+
+  const handleNewGameStart = (): void => {
+    reset();
+    setCards(generateMatrix(difficulty));
+    setFlippedCards([]);
+    firstCardId.current = '';
+    setIsModalActive(false);
+  };
+
+  const handleClick = (rowIndex: number, index: number) => {
+    const totalCards = difficulty === 'normal' ? TOTAL_NORMAL : TOTAL_HARD;
+
+    const cardId = `${rowIndex}:${index}`;
+    start();
+
+    if (isDisabled) return;
+    if (flippedCards.includes(cardId)) return;
+
+    if (firstCardId.current === '') {
+      firstCardId.current = cardId;
+      setFlippedCards((prevValue) => [...prevValue, firstCardId.current]);
+      return;
+    }
+
+    setFlippedCards((prevValue) => {
+      const updateCards = [...prevValue, cardId];
+
+      if (totalCards === updateCards.length) {
+        stop();
+        setTimeout(() => {
+          if (totalCards === updateCards.length) {
+            saveBestTime(displayTime);
+          }
+          setIsModalActive(true);
+        }, 100);
+      }
+      return updateCards;
+    });
+
+    const [firstRow, firstIndex] = firstCardId.current.split(':').map(Number);
+    const firstCard = cards[firstRow][firstIndex].value;
+    const secondCard = cards[rowIndex][index].value;
+
+    if (firstCard !== secondCard) {
+      setIsDisabled(true);
+
+      const firstCardIdRef = firstCardId.current;
+      const secondCardId = cardId;
+
+      setTimeout(() => {
+        setFlippedCards((prevValue) =>
+          prevValue.filter(
+            (id) => id !== firstCardIdRef && id !== secondCardId,
+          ),
+        );
+        firstCardId.current = '';
+        setIsDisabled(false);
+      }, 1000);
+      return;
+    }
+    firstCardId.current = '';
+  };
+
+  const saveBestTime = (newTime: string) => {
+    const timeToSeconds = (time: string): number => {
+      const [mins, secs] = time.split(':').map(Number);
+      return mins * 60 + secs;
+    };
+    const current = [...bestTimes];
+    current.push(newTime);
+    current.sort((a, b) => timeToSeconds(a) - timeToSeconds(b));
+    const top3 = current.slice(0, 3);
+    setBestTimes(top3);
+    localStorage.setItem('bestTimes', JSON.stringify(top3));
+  };
+  return (
+    <div className={`${styles.memoryContainer} container`}>
+      {!gameStarted ? (
+        <>
+          <WelcomeMessage />
+          <div className={styles.difficultyButton}>
+            <Button
+              onClick={() => handleDifficultyChange('normal')}
+              size="medium"
+            >
+              Normal
+            </Button>
+            <Button
+              onClick={() => handleDifficultyChange('hard')}
+              size="medium"
+            >
+              Hard
+            </Button>
+          </div>
+        </>
+      ) : (
+        <>
+          <Timer displayTime={displayTime} />
+          <GameBoard
+            cards={cards}
+            flippedCards={flippedCards}
+            onCardClick={handleClick}
+            difficulty={difficulty}
+          />
+          <BestTimes times={bestTimes} />
+        </>
+      )}
+      <VictoryModal
+        isActive={isModalActive}
+        onNewGame={handleNewGameStart}
+        displayTime={displayTime}
+      />
+      <Button onClick={goBack} size="medium" variant="secondary">
+        ◀-- К выбору игры
+      </Button>
+    </div>
+  );
+};
+
+export default MemoryGame;

@@ -1,0 +1,65 @@
+@use '../../styles/mixins.scss' as *;
+.component {
+  @include flex-center;
+  gap: 1rem;
+  padding: 15px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #6c5ce7 0%, #4a3ab5 100%);
+  border-radius: 40px;
+  box-sizing: border-box;
+  border: none;
+  color: white;
+  cursor: pointer;
+  animation: none;
+  transition: all 0.2s ease;
+  margin: 16px 0;
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+  @include respond-to(mobile) {
+    width: 50%;
+    padding: 12px 15px;
+    font-size: 0.8rem;
+    border-radius: 20px;
+  }
+  &:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #7d6ef5 0%, #5e4dcf 100%);
+    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+.primary {
+  background: linear-gradient(135deg, #6c5ce7 0%, #4a3ab5 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #7d6ef5 0%, #5e4dcf 100%);
+    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
+  }
+}
+
+.secondary {
+  background: rgba(108, 92, 231, 0.15);
+  color: white;
+  border: 1px solid rgba(108, 92, 231, 0.4);
+
+  &:hover {
+    background: rgba(108, 92, 231, 0.25);
+    border-color: rgba(108, 92, 231, 0.6);
+  }
+}
+.small {
+  width: 20%;
+  padding: 0;
+}
+.medium {
+  width: 30%;
+}
+.large {
+  width: 100%;
+}

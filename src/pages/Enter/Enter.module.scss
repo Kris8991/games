@@ -1,0 +1,30 @@
+@use '../../styles/mixins.scss' as *;
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #fff, #a0a0c0);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  @include respond-to(mobile) {
+    font-size: 1rem;
+  }
+}
+
+.subtitle {
+  text-align: center;
+  color: #a0a0c0;
+  font-size: 16px;
+  margin-bottom: 1.5rem;
+  @include respond-to(mobile) {
+    margin-bottom: 1rem;
+  }
+}
+
+.footer {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 14px;
+  color: #707090;
+}
