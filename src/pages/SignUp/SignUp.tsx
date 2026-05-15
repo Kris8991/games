@@ -1,61 +1,60 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthState } from '../../stores/user';
 import Button from '../../ui/Button';
 import TextField from '../../ui/TextField';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const signUpSchema = z.object({
+  userName: z.string().min(4, 'Минимум 4 символа'),
+  email: z.email('Введите корректный email'),
+  password: z
+    .string()
+    .min(6, 'Минимум 6 символов')
+    .regex(/[A-Z]/, 'Минимум одна заглавная бука')
+    .regex(/[0-9]/, 'Мниимум одна цифра'),
+});
+type SignUpFormData = z.infer<typeof signUpSchema>;
 
 const SignUp: React.FC = () => {
-  const [formData, setformData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
   const { signUp } = useAuthState();
   const navigate = useNavigate();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setformData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const username = (form.elements.namedItem('username') as HTMLInputElement)
-      .value;
-    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-    const password = (form.elements.namedItem('password') as HTMLInputElement)
-      .value;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormData>({ resolver: zodResolver(signUpSchema) });
 
-    signUp({ email: email, name: username, password: password }, () => {});
-    navigate('/sign_in');
+  const onSubmit = (data: SignUpFormData) => {
+    const { userName, email, password } = data;
+
+    signUp({ email: email, name: userName, password: password }, () => {
+      navigate('/sign_in');
+    });
   };
   return (
     <div className="container containerAuth">
-      <form onSubmit={handleSubmit} className="card">
+      <form onSubmit={handleSubmit(onSubmit)} className="card">
         <TextField
           label="Имя: "
-          name="username"
           type="text"
-          value={formData.username}
-          onChange={handleChange}
+          error={errors.userName?.message}
+          {...register('userName')}
         />
 
         <TextField
           label="Email: "
-          name="email"
           type="email"
-          value={formData.email}
-          onChange={handleChange}
+          error={errors.email?.message}
+          {...register('email')}
         />
         <TextField
           label="Пароль: "
-          name="password"
           type="password"
-          value={formData.password}
-          onChange={handleChange}
+          error={errors.password?.message}
+          {...register('password')}
         />
         <Button type="submit">Зарегистрироваться</Button>
       </form>

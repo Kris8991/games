@@ -1,30 +1,26 @@
 import React from 'react';
 import styles from './TextField.module.scss';
 type TextFieldProps = {
+  error?: string;
   label: string;
-  name: string;
   type: 'email' | 'password' | 'text';
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
+} & React.InsHTMLAttributes<HTMLInputElement>;
 
 const TextField: React.FC<TextFieldProps> = ({
   label,
-  name,
   type = 'text',
-  value,
-  onChange,
+  error,
+  ...inputProps
 }) => {
   return (
-    <label htmlFor={name} className={styles.component}>
+    <label className={styles.component}>
       {label}
       <input
-        name={name}
         type={type}
-        value={value}
-        onChange={onChange}
-        className={styles.input}
+        className={`${styles.input} ${error ? styles.inputError : ''} `}
+        {...inputProps}
       />
+      {error && <span className={styles.error}>{error}</span>}
     </label>
   );
 };
