@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './TextField.module.scss';
+import clsx from 'clsx';
 type TextFieldProps = {
   error?: string;
   label: string;
@@ -17,7 +18,7 @@ const TextField: React.FC<TextFieldProps> = ({
       {label}
       <input
         type={type}
-        className={`${styles.input} ${error ? styles.inputError : ''} `}
+        className={clsx(styles.input, { [styles.inputError]: !!error })}
         {...inputProps}
       />
       {error && <span className={styles.error}>{error}</span>}

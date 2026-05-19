@@ -13,8 +13,8 @@
   }
   h3 {
     margin: 0 0 0.5rem;
-    color: $text-dark;
-    text-shadow: $shadow-lg;
+    color: var(--text-dark);
+    text-shadow: var(--shadow-lg);
   }
   .list {
     @include flex-center;

@@ -1,5 +1,4 @@
 @use '../../../styles/mixins.scss' as *;
-@use '../../../styles/variables.scss' as *;
 
 .card {
   aspect-ratio: 1;
@@ -8,17 +7,17 @@
   @include flex-center;
   font-size: clamp(1.5rem, 5vw, 2.5rem);
   cursor: pointer;
-  background: linear-gradient(135deg, $primary 0%, $secondary 100%);
-  color: $white;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: var(--white);
   border-radius: 12px;
-  box-shadow: $shadow-md;
+  box-shadow: var(--shadow-md);
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.4s ease;
   &.flipped {
-    background: linear-gradient(135deg, $accent 0%, $danger 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--danger) 100%);
     transform: rotateY(180deg);
-    color: $text-dark;
+    color: var(--text-dark);
     img {
       transform: rotateY(180deg);
     }
@@ -26,7 +25,7 @@
 
   &:hover:not(.flipped) {
     transform: scale(1.05);
-    box-shadow: $shadow-lg;
+    box-shadow: var(--shadow-lg);
   }
 
   img {

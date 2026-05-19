@@ -7,6 +7,7 @@ import { useAuthState } from '../../stores/user';
 import Button from '../../ui/Button';
 import TextField from '../../ui/TextField';
 import styles from './SignIn.module.scss';
+
 const signInSchema = z.object({
   email: z.email('Введите корректный email'),
   password: z.string().min(1, 'Введите пароль'),
@@ -17,7 +18,7 @@ type SignInFormData = z.infer<typeof signInSchema>;
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
   const { signIn } = useAuthState();
-  const [authError, setAuthError] = useState<string | null>(null); // 👈 для ошибки авторизации
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const {
     register,
