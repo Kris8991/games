@@ -1,57 +1,66 @@
-import React, { useState } from 'react';
-import { useAuthState } from '../../stores/user';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthState } from '../../stores/user';
 import Button from '../../ui/Button';
 import TextField from '../../ui/TextField';
+import styles from './SignIn.module.scss';
+
+const signInSchema = z.object({
+  email: z.email('Введите корректный email'),
+  password: z.string().min(1, 'Введите пароль'),
+});
+
+type SignInFormData = z.infer<typeof signInSchema>;
 
 const SignIn: React.FC = () => {
-  const [formData, setformData] = useState({
-    email: '',
-    password: '',
-  });
   const navigate = useNavigate();
+  const { signIn } = useAuthState();
+  const [authError, setAuthError] = useState<string | null>(null);
 
-  const { signIn, setUser } = useAuthState();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+  });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setformData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const onSubmit = async (data: SignInFormData) => {
+    setAuthError(null);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const { email } = formData;
-    const { password } = formData;
-
+    const { email, password } = data;
     const user = signIn(email, password);
+
     if (user) {
-      setUser(user);
       navigate('/');
     } else {
-      console.log('error');
+      setAuthError('Неверный email или пароль');
     }
   };
+
   return (
     <div className="container containerAuth">
-      <form onSubmit={handleSubmit} className="card">
+      <form onSubmit={handleSubmit(onSubmit)} className="card">
+        {authError && <div className={styles.authError}>{authError}</div>}
+
         <TextField
           label="Email: "
-          name="email"
           type="email"
-          value={formData.email}
-          onChange={handleChange}
+          error={errors.email?.message}
+          {...register('email')}
         />
+
         <TextField
           label="Пароль: "
-          name="password"
           type="password"
-          value={formData.password}
-          onChange={handleChange}
+          error={errors.password?.message}
+          {...register('password')}
         />
-        <Button type="submit">Войти</Button>
+
+        <Button type="submit">{isSubmitting ? 'Вход...' : 'Войти'}</Button>
       </form>
     </div>
   );
